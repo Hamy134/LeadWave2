@@ -1,44 +1,21 @@
-import { useEffect } from 'react';
-import { Calendar } from 'lucide-react';
+import React from 'react';
 
-interface CalComButtonProps {
-  children: React.ReactNode;
-  className?: string;
-  variant?: 'primary' | 'secondary' | 'ghost';
+interface CalComButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: 'primary' | 'secondary';
+  // any other props
 }
 
-export const CalComButton = ({ children, className = '', variant = 'primary' }: CalComButtonProps) => {
-  useEffect(() => {
-    // Load Cal.com embed script
-    const script = document.createElement('script');
-    script.src = 'https://app.cal.com/embed/embed.js';
-    script.async = true;
-    document.head.appendChild(script);
-
-    return () => {
-      // Cleanup script if component unmounts
-      if (document.head.contains(script)) {
-        document.head.removeChild(script);
-      }
-    };
-  }, []);
-
-  const baseClass = `inline-flex items-center justify-center space-x-2 font-semibold rounded-xl transition-all duration-300 hover:scale-[1.02] ${className}`;
-  
-  const variantClasses = {
-    primary: 'btn-primary',
-    secondary: 'btn-secondary', 
-    ghost: 'btn-ghost'
-  };
+export const CalComButton: React.FC<CalComButtonProps> = ({ variant = 'primary', children, ...props }) => {
+  let baseClasses = "px-6 py-3 rounded font-semibold focus:outline-none focus:ring-4";
+  if (variant === 'primary') {
+    baseClasses += " bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-300";
+  } else {
+    baseClasses += " bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-400";
+  }
 
   return (
-    <button
-      className={`${baseClass} ${variantClasses[variant]}`}
-      data-cal-link="hamish-countwave/30min"
-      data-cal-config='{"layout":"month_view"}'
-    >
-      <Calendar className="w-4 h-4" />
-      <span>{children}</span>
+    <button className={baseClasses} {...props}>
+      {children}
     </button>
   );
 };

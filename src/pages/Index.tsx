@@ -19,7 +19,12 @@ import { ProcessVisualization } from '../components/ProcessVisualization';
 import { CountUpAnimation } from '../components/CountUpAnimation';
 import { CalComButton } from '../components/CalComButton';
 import heroImage from '../assets/hero-bg.jpg';
-import processImage from '../assets/process-visual.jpg';
+import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
+import { FAQ } from '../components/FAQ';
+import { CallToAction } from '@/components/CallToAction';
+import { Features } from '@/components/Features';
+import { Stats } from '../components/Stats';
 
 const benefits = [
   {
@@ -98,14 +103,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden">
         {/* Background */}
-        <div className="absolute inset-0">
-          <img 
-            src={heroImage} 
-            alt="AI Email Generation"
-            className="w-full h-full object-cover opacity-5"
-          />
-          <div className="absolute inset-0 bg-gradient-hero" />
-        </div>
+
 
         <div className="relative z-10 container mx-auto px-4 py-20 lg:py-32">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -114,7 +112,7 @@ const Index = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8"
+              className="space-y-8 max-w-full lg:max-w-full lg:pr-12"
             >
               <div className="space-y-6">
                 <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold">
@@ -122,54 +120,47 @@ const Index = () => {
                   <span>AI-Powered Lead Generation</span>
                 </div>
 
-                <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-                  Generate 
-                  <span className="bg-gradient-primary bg-clip-text text-transparent"> Qualified Leads</span>
-                  <br />
-                  with Hyper-Personalized Cold Emails
-                </h1>
+                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
+                    Generate <span className="text-blue-600 underline-animation">Qualified Leads</span>
+                    <span className="block">with Hyper-Personalized</span>
+                    <span className="text-blue-600 block">Cold Emails</span>
+                  </h1>
 
-                <p className="text-xl text-muted-foreground leading-relaxed">
-                  Our AI researches your prospects, crafts personalized emails that actually get responses, 
-                  and books qualified calls on autopilot. Scale your outreach 10x without hiring.
-                </p>
+              <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl leading-relaxed">
+                Our <span className="font-semibold text-gray-900 scroll-underline underline-animation">fully automated AI system</span> scrapes deep prospect data, crafts hyper-personalized emails, and delivers them at scale to <span className="font-semibold text-gray-900 scroll-underline underline-animation">boost your booked calls</span> and revenue.
+              </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <CalComButton variant="primary">
-                  Book Your Strategy Call
-                </CalComButton>
-                <button className="btn-secondary">
-                  <span>Watch Demo</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              {/* Social Proof */}
-              <div className="flex items-center space-x-8 pt-8">
-                <div className="text-center">
-                  <div className="stat-number">
-                    <CountUpAnimation end={2500} suffix="+" />
-                  </div>
-                  <div className="text-sm text-muted-foreground">Companies Trust Us</div>
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <CalComButton
+                    variant="primary"
+                    onClick={() =>
+                      window.open(
+                        "https://cal.com/hamish-countwave/30min?overlayCalendar=true",
+                        "_blank"
+                      )
+                    }
+                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg
+                              hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl
+                              transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                  >
+                    Book Your Strategy Call
+                  </CalComButton>
                 </div>
-                <div className="text-center">
-                  <div className="stat-number">
-                    <CountUpAnimation end={73} suffix="%" />
-                  </div>
-                  <div className="text-sm text-muted-foreground">Average Open Rate</div>
-                </div>
-              </div>
             </motion.div>
 
             {/* Email Example Cycler */}
             <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex justify-center lg:justify-end"
+              transition={{ duration: 1.8, delay: 0.2 }}
+              className="flex justify-center lg:justify-end pr-50"
             >
-              <EmailExampleCycler />
+              <div className="min-h-[500px] w-[90%] lg:w-[70%] ml-auto">
+                <EmailExampleCycler />
+              </div>
+
+
             </motion.div>
           </div>
         </div>
@@ -202,177 +193,20 @@ const Index = () => {
         </div>
       </ScrollAnimatedSection>
 
-      {/* Benefits Section */}
-      <ScrollAnimatedSection className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              Why Choose AI-Powered 
-              <span className="bg-gradient-primary bg-clip-text text-transparent"> Cold Email Generation?</span>
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Stop sending generic emails that get ignored. Start generating personalized messages 
-              that prospects actually want to respond to.
-            </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <motion.div
-                  key={benefit.title}
-                  className="glass-card p-8 group hover:shadow-glow transition-all duration-300"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                >
-                  <div className="mb-6">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-primary/10 text-primary rounded-xl group-hover:scale-110 transition-transform duration-300">
-                      <Icon className="w-6 h-6" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-4">{benefit.title}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{benefit.description}</p>
-                </motion.div>
-              );
-            })}
-          </div>
-        </div>
-      </ScrollAnimatedSection>
-
-      {/* Process Section */}
-      <ScrollAnimatedSection className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">
-              How Our AI 
-              <span className="bg-gradient-primary bg-clip-text text-transparent"> Generates Results</span>
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              From understanding your goals to booking qualified calls - here's how our 
-              AI-powered system transforms your lead generation.
-            </p>
-          </div>
-
-          <div className="relative">
-            <div className="absolute inset-0 flex items-center justify-center opacity-5">
-              <img 
-                src={processImage} 
-                alt="Process Visualization"
-                className="w-full max-w-4xl object-contain"
-              />
-            </div>
-            <ProcessVisualization />
-          </div>
-        </div>
-      </ScrollAnimatedSection>
-
-      {/* CTA Section */}
-      <ScrollAnimatedSection className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="glass-card p-12 text-center max-w-4xl mx-auto">
-            <motion.div
-              className="space-y-8"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-            >
-              <div className="space-y-4">
-                <h2 className="text-3xl md:text-4xl font-bold">
-                  Ready to 10x Your Lead Generation?
-                </h2>
-                <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                  Join 2,500+ companies using AI to generate more qualified leads, 
-                  book more calls, and close more deals.
-                </p>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <CalComButton variant="primary">
-                  Book Your Free Strategy Call
-                </CalComButton>
-                <button className="btn-secondary">
-                  <Mail className="w-4 h-4" />
-                  <span>See Live Demo</span>
-                </button>
-              </div>
-
-              <div className="text-sm text-muted-foreground">
-                ✅ No setup fees • ✅ 30-day money-back guarantee • ✅ Setup in under 24 hours
-              </div>
-            </motion.div>
-          </div>
-        </div>
-      </ScrollAnimatedSection>
+      {/* Process Section - Full Screen */}
+      <section className="relative h-screen">
+        <ProcessVisualization />
+      </section>
 
       {/* FAQ Section */}
       <ScrollAnimatedSection className="py-20 bg-muted/30">
-        <div className="container mx-auto px-4">
-          <div className="text-center max-w-3xl mx-auto mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Frequently Asked Questions
-            </h2>
-            <p className="text-xl text-muted-foreground">
-              Everything you need to know about AI-powered cold email generation.
-            </p>
-          </div>
-
-          <div className="max-w-4xl mx-auto space-y-6">
-            {faqs.map((faq, index) => (
-              <motion.div
-                key={faq.question}
-                className="faq-item"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <h3 className="text-lg font-semibold mb-3 flex items-start">
-                  <Plus className="w-5 h-5 text-primary mt-0.5 mr-3 flex-shrink-0" />
-                  {faq.question}
-                </h3>
-                <p className="text-muted-foreground leading-relaxed ml-8">
-                  {faq.answer}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+            <FAQ />
       </ScrollAnimatedSection>
 
-      {/* Final CTA */}
-      <section className="py-20 bg-gradient-primary">
-        <div className="container mx-auto px-4 text-center">
-          <motion.div
-            className="space-y-8"
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <div className="space-y-4">
-              <h2 className="text-3xl md:text-4xl font-bold text-white">
-                Start Generating Qualified Leads Today
-              </h2>
-              <p className="text-xl text-white/90 max-w-2xl mx-auto">
-                Book a 30-minute strategy call and we'll show you exactly how to 
-                implement AI-powered lead generation for your business.
-              </p>
-            </div>
-
-            <CalComButton className="bg-white text-primary hover:bg-white/90">
-              Book Your Strategy Call Now
-            </CalComButton>
-
-            <div className="text-white/80 text-sm">
-              🚀 Most clients see results within their first week
-            </div>
-          </motion.div>
-        </div>
-      </section>
+      <Stats/>
+      <Features/>
+      <CallToAction onBookCall={() => window.open('https://cal.com/hamish-countwave/30min?overlayCalendar=true', '_blank')} />
 
       {/* Floating CTA Button */}
       <motion.div
@@ -381,9 +215,13 @@ const Index = () => {
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
       >
-        <CalComButton className="shadow-2xl pulse-glow">
+        <CalComButton 
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          onClick={() => window.open('https://cal.com/hamish-countwave/30min?overlayCalendar=true', '_blank')}
+        >
           Book Call
         </CalComButton>
+
       </motion.div>
     </div>
   );
