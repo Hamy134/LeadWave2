@@ -178,12 +178,6 @@ const processStages = [
       { icon: Fingerprint, label: "Behavioral Profiling", status: "processing", description: "Creates detailed behavioral and preference profiles" }
     ],
     metrics: {
-      sources: 52,
-      dataPoints: 847,
-      accuracy: 96.4,
-      speed: "1.8s per prospect",
-      coverage: "99.2%",
-      freshness: "Real-time"
     },
     tools: [
       { name: "Neural Network", status: "online", load: 67 },
@@ -218,10 +212,6 @@ const processStages = [
       readability: "Grade 8"
     },
     aiModels: [
-      { name: "GPT-4 Turbo", status: "active", tokens: "2.1M", efficiency: 94 },
-      { name: "Claude-3", status: "standby", tokens: "890K", efficiency: 91 },
-      { name: "Custom LLM", status: "training", tokens: "1.5M", efficiency: 87 },
-      { name: "Sentiment AI", status: "active", tokens: "450K", efficiency: 96 }
     ]
   },
   {
@@ -250,10 +240,6 @@ const processStages = [
       reputation: 95
     },
     infrastructure: [
-      { name: "Send Servers", status: "optimal", uptime: "99.9%", load: 34 },
-      { name: "Tracking System", status: "active", uptime: "100%", load: 67 },
-      { name: "Analytics Engine", status: "processing", uptime: "99.8%", load: 89 },
-      { name: "Compliance Monitor", status: "scanning", uptime: "100%", load: 23 }
     ]
   }
 ];
@@ -417,8 +403,6 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
       onHoverEnd={() => !isActive && controls.start("inactive")}
       style={{ 
         zIndex: isActive ? 10 : 5,
-        minHeight: '600px',
-        maxHeight: '800px'
       }}
     >
       {/* Enhanced background with multiple layers */}
@@ -429,7 +413,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
       <div className="neural-network-bg rounded-3xl opacity-20" />
       
       {/* Main card with fixed dimensions */}
-      <div className="process-card relative p-8 rounded-3xl transition-all duration-700 stable-container h-full overflow-hidden">
+      <div className="process-card relative p-8 rounded-3xl transition-all duration-700 stable-container h-full">
         {/* Enhanced header with more interactive elements */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
@@ -486,7 +470,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
         </div>
 
         {/* Enhanced features grid with better interactivity */}
-        <div className="grid grid-cols-2 gap-3 mb-8 max-h-48 overflow-y-auto custom-scrollbar">
+        <div className="grid grid-cols-2 gap-3 mb-8 max-h-48">
           {stage.features.map((feature, idx) => {
             const FeatureIcon = feature.icon;
             return (
@@ -531,7 +515,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="space-y-6 h-full overflow-hidden"
+                className="space-y-6 h-full"
               >
                 {/* Stage 1: Enhanced Prospect Research */}
                 {stage.id === 1 && (
@@ -910,8 +894,7 @@ export const ProcessVisualization = () => {
   return (
     <div 
       ref={ref} 
-      className="relative bg-gradient-to-br from-background via-muted/5 to-accent/5 overflow-hidden"
-      style={{ minHeight: '100vh', maxHeight: '100vh' }}
+      className="relative bg-gradient-to-br from-background via-muted/5 to-accent/5"
     >
       {/* Enhanced background elements */}
       <div className="absolute inset-0">
@@ -969,7 +952,7 @@ export const ProcessVisualization = () => {
       ))}
 
       {/* Main content with fixed container */}
-      <div className="relative z-10 container mx-auto px-4 py-20 h-full">
+      <div className="relative z-10 container mx-auto px-4 py-12 h-full">
         {/* Enhanced header */}
         <motion.div
           className="text-center mb-16"
@@ -1045,7 +1028,6 @@ export const ProcessVisualization = () => {
             viewMode === 'tablet' ? 'grid-cols-2' : 
             'grid-cols-3'
           }`}
-          style={{ minHeight: '600px' }}
         >
           {processStages.map((stage, index) => (
             <motion.div
@@ -1073,56 +1055,7 @@ export const ProcessVisualization = () => {
             </motion.div>
           ))}
         </div>
-
-        {/* Enhanced bottom metrics with fixed positioning */}
-        {showMetrics && (
-          <motion.div
-            className="mt-16 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
-            transition={{ delay: 1.5 }}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              {[
-                { label: "Prospects Analyzed", value: "15,420+", icon: Users, color: "blue" },
-                { label: "Emails Generated", value: "1,247", icon: Mail, color: "purple" },
-                { label: "Average Accuracy", value: "96.4%", icon: Target, color: "green" },
-                { label: "Calls Booked", value: "47", icon: Calendar, color: "orange" }
-              ].map((metric, index) => {
-                const MetricIcon = metric.icon;
-                return (
-                  <InteractiveTooltip key={metric.label} content={`${metric.label}: ${metric.value}`}>
-                    <motion.div
-                      className="bg-background/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center cursor-pointer hover:bg-background/80 transition-all duration-300 hover:scale-105"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.9 }}
-                      transition={{ delay: 1.8 + (index * 0.1) }}
-                      whileHover={{ y: -5 }}
-                    >
-                      <MetricIcon className={`w-8 h-8 text-${metric.color}-500 mx-auto mb-3`} />
-                      <div className="text-2xl font-bold text-foreground mb-1">{metric.value}</div>
-                      <div className="text-sm text-muted-foreground">{metric.label}</div>
-                    </motion.div>
-                  </InteractiveTooltip>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
       </div>
-
-      {/* Performance indicator */}
-      <motion.div
-        className="fixed top-4 right-4 z-50 bg-background/80 backdrop-blur-md border border-border/50 rounded-lg p-3"
-        initial={{ opacity: 0, scale: 0 }}
-        animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0 }}
-        transition={{ delay: 2 }}
-      >
-        <div className="flex items-center space-x-2">
-          <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-          <span className="text-xs font-medium">System Online</span>
-        </div>
-      </motion.div>
     </div>
   );
 };
