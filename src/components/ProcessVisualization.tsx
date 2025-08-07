@@ -427,7 +427,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
       <div className="neural-network-bg rounded-3xl opacity-20" />
       
       {/* Main card with fixed dimensions */}
-      <div className="process-card relative p-8 rounded-3xl transition-all duration-700 stable-container h-full overflow-hidden">
+      <div className="process-card relative p-8 rounded-3xl transition-all duration-700 stable-container h-full">
         {/* Enhanced header with more interactive elements */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
@@ -484,7 +484,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
         </div>
 
         {/* Enhanced features grid with better interactivity */}
-        <div className="grid grid-cols-2 gap-3 mb-8 max-h-48 overflow-y-auto custom-scrollbar">
+        <div className="grid grid-cols-2 gap-3 mb-8 max-h-48">
           {stage.features.map((feature, idx) => {
             const FeatureIcon = feature.icon;
             return (
@@ -529,7 +529,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5, ease: "easeOut" }}
-                className="space-y-6 h-full overflow-hidden"
+                className="space-y-6 h-full"
               >
                 {/* Stage 1: Enhanced Prospect Research */}
                 {stage.id === 1 && (
