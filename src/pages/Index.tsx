@@ -101,7 +101,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <section className="relative overflow-hidden">
+      <section className="relative overflow-hidden stable-container">
         {/* Background */}
 
 
@@ -112,7 +112,7 @@ const Index = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8 max-w-full lg:max-w-full lg:pr-12"
+              className="space-y-8 max-w-full lg:max-w-full lg:pr-12 stable-animation"
             >
               <div className="space-y-6">
                 <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold">
@@ -142,7 +142,8 @@ const Index = () => {
                     }
                     className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg
                               hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl
-                              transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+                              transition duration-300 ease-in-out stable-animation focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    style={{ transform: 'translateZ(0)' }}
                   >
                     Book Your Strategy Call
                   </CalComButton>
@@ -154,9 +155,9 @@ const Index = () => {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.8, delay: 0.2 }}
-              className="flex justify-center lg:justify-end pr-50"
+              className="flex justify-center lg:justify-end pr-50 stable-animation"
             >
-              <div className="min-h-[500px] w-[90%] lg:w-[70%] ml-auto">
+              <div className="min-h-[500px] w-[90%] lg:w-[70%] ml-auto stable-container">
                 <EmailExampleCycler />
               </div>
 
@@ -167,17 +168,18 @@ const Index = () => {
       </section>
 
       {/* Stats Section */}
-      <ScrollAnimatedSection className="py-20 bg-muted/30">
+      <ScrollAnimatedSection className="py-20 bg-muted/30 stable-container">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {stats.map((stat, index) => (
               <motion.div
                 key={stat.label}
-                className="text-center"
+                className="text-center stable-animation"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
                 viewport={{ once: true }}
+                style={{ transform: 'translateZ(0)' }}
               >
                 <div className="stat-number">
                   <CountUpAnimation 
@@ -195,12 +197,12 @@ const Index = () => {
 
 
       {/* Process Section - Full Screen */}
-      <section className="relative h-screen">
+      <section>
         <ProcessVisualization />
       </section>
 
       {/* FAQ Section */}
-      <ScrollAnimatedSection className="py-20 bg-muted/30">
+      <ScrollAnimatedSection className="py-20 bg-muted/30 stable-container">
             <FAQ />
       </ScrollAnimatedSection>
 
@@ -214,9 +216,10 @@ const Index = () => {
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
+        style={{ transform: 'translateZ(0)' }}
       >
         <CalComButton 
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-blue-300"
+          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 ease-in-out stable-animation focus:outline-none focus:ring-4 focus:ring-blue-300"
           onClick={() => window.open('https://cal.com/hamish-countwave/30min?overlayCalendar=true', '_blank')}
         >
           Book Call

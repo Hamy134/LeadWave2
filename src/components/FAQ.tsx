@@ -58,10 +58,11 @@ export const FAQ: React.FC = () => {
         <div className="space-y-4">
           {faqs.map((faq, index) => (
             <ScrollAnimation key={index} animation="slideUp" delay={index * 50}>
-              <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden stable-container">
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200"
+                  className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200 stable-animation"
+                  style={{ transform: 'translateZ(0)' }}
                 >
                   <h3 className="font-semibold text-gray-900 pr-4">{faq.question}</h3>
                   {openIndex === index ? (
@@ -71,7 +72,7 @@ export const FAQ: React.FC = () => {
                   )}
                 </button>
                 
-                <div className={`transition-all duration-300 ease-in-out ${
+                <div className={`transition-all duration-300 ease-in-out stable-animation ${
                   openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 } overflow-hidden`}>
                   <div className="px-6 pb-5">

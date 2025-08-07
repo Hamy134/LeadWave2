@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useAnimation } from 'framer-motion';
 import { 
   Target, 
   Database, 
@@ -9,6 +9,7 @@ import {
   Mail, 
   Calendar,
   Zap,
+  Shield,
   CheckCircle,
   ArrowRight,
   Users,
@@ -33,12 +34,25 @@ import {
   Linkedin,
   Play,
   Pause,
-  RotateCcw
+  RotateCcw,
+  Monitor,
+  Smartphone,
+  Tablet,
+  Code,
+  Layers,
+  Filter,
+  Zap as Lightning,
+  Radar,
+  Network,
+  Atom,
+  Binary,
+  CircuitBoard
 } from 'lucide-react';
 
-// Mock data for realistic content
+// Enhanced mock data with more realistic content
 const mockProspects = [
   {
+    id: 1,
     name: "Sarah Chen",
     title: "VP of Sales",
     company: "TechFlow Inc",
@@ -46,9 +60,13 @@ const mockProspects = [
     companySize: "50-200",
     industry: "SaaS",
     location: "San Francisco, CA",
-    avatar: "👩‍💼"
+    avatar: "👩‍💼",
+    linkedinActivity: "Hiring 5 new SDRs this quarter",
+    painPoints: ["Manual outreach scaling", "Low response rates"],
+    buyingSignals: ["Budget approved", "Actively hiring"]
   },
   {
+    id: 2,
     name: "Marcus Rodriguez",
     title: "Head of Growth",
     company: "ScaleUp Solutions",
@@ -56,9 +74,13 @@ const mockProspects = [
     companySize: "20-50",
     industry: "FinTech",
     location: "Austin, TX",
-    avatar: "👨‍💼"
+    avatar: "👨‍💼",
+    linkedinActivity: "Celebrating funding milestone",
+    painPoints: ["Need to scale quickly", "Limited resources"],
+    buyingSignals: ["Fresh funding", "Growth targets"]
   },
   {
+    id: 3,
     name: "Emily Watson",
     title: "CEO & Founder",
     company: "StartupXYZ",
@@ -66,31 +88,43 @@ const mockProspects = [
     companySize: "5-20",
     industry: "E-commerce",
     location: "New York, NY",
-    avatar: "👩‍💻"
+    avatar: "👩‍💻",
+    linkedinActivity: "Looking for sales automation tools",
+    painPoints: ["Time-consuming manual work", "Inconsistent results"],
+    buyingSignals: ["Actively searching", "Budget allocated"]
   }
 ];
 
 const mockEmails = [
   {
-    subject: "Scaling your sales team?",
-    preview: "Hi Sarah, I noticed you're expanding your sales team at TechFlow. We've helped similar SaaS companies...",
-    personalization: "Based on your recent post about hiring SDRs",
+    id: 1,
+    subject: "Scaling your sales team at TechFlow?",
+    preview: "Hi Sarah, I noticed you're expanding your sales team at TechFlow. We've helped similar SaaS companies reduce SDR ramp time by 60%...",
+    personalization: "Based on your recent LinkedIn post about hiring SDRs",
     tone: "Professional but friendly",
-    valueProp: "10x faster lead generation"
+    valueProp: "60% faster SDR ramp time",
+    openRate: 78,
+    replyRate: 24
   },
   {
-    subject: "Congrats on the Series A!",
-    preview: "Hi Marcus, congratulations on the $5M raise! As you scale ScaleUp Solutions, you'll need...",
+    id: 2,
+    subject: "Congrats on the Series A! 🎉",
+    preview: "Hi Marcus, congratulations on ScaleUp's $5M Series A! As you scale, you'll need efficient lead generation...",
     personalization: "Mentioned your recent funding round",
     tone: "Celebratory and consultative",
-    valueProp: "Automated prospect research"
+    valueProp: "Automated prospect research",
+    openRate: 82,
+    replyRate: 31
   },
   {
+    id: 3,
     subject: "Your hiring post caught my attention",
-    preview: "Hi Emily, I saw your post about hiring sales talent. Finding the right people is tough, but...",
+    preview: "Hi Emily, I saw your post about hiring sales talent. Finding the right people is tough, but what if you could 10x their productivity?",
     personalization: "Referenced your hiring announcement",
     tone: "Empathetic and helpful",
-    valueProp: "AI-powered lead qualification"
+    valueProp: "10x sales productivity boost",
+    openRate: 75,
+    replyRate: 28
   }
 ];
 
@@ -100,651 +134,681 @@ const mockMetrics = {
   replyRate: 23,
   callsBooked: 47,
   conversionRate: 3.8,
-  avgResponseTime: "2.3 hours"
+  avgResponseTime: "2.3 hours",
+  prospectsScrapped: 15420,
+  dataPoints: 847,
+  aiAccuracy: 96.4
 };
 
-export const ProcessVisualization = () => {
-  const [isVisible, setIsVisible] = useState(false);
-  const [activeStage, setActiveStage] = useState<number>(0);
-  const [activeSubStage, setActiveSubStage] = useState<number>(0);
-  const [hoveredElement, setHoveredElement] = useState<string | null>(null);
-  const [expandedWindow, setExpandedWindow] = useState<number | null>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [currentEmailIndex, setCurrentEmailIndex] = useState(0);
-  const [secretClicks, setSecretClicks] = useState(0);
-  const [showEasterEgg, setShowEasterEgg] = useState(false);
+// Process stages with enhanced data
+const processStages = [
+  {
+    id: 1,
+    title: "Intelligence Gathering",
+    subtitle: "AI-Powered Prospect Research",
+    description: "Our AI system scrapes and analyzes thousands of data points to build comprehensive prospect profiles",
+    icon: Radar,
+    color: "from-blue-500 to-indigo-600",
+    bgGradient: "from-blue-500/10 to-indigo-600/5",
+    position: { x: 100, y: 100 },
+    features: [
+      { icon: Linkedin, label: "LinkedIn Analysis", status: "active" },
+      { icon: Globe, label: "Company Research", status: "active" },
+      { icon: Activity, label: "Social Signals", status: "processing" },
+      { icon: BarChart3, label: "Market Intelligence", status: "queued" }
+    ],
+    metrics: {
+      sources: 12,
+      dataPoints: 847,
+      accuracy: 96.4,
+      speed: "2.3s per prospect"
+    }
+  },
+  {
+    id: 2,
+    title: "Neural Processing",
+    subtitle: "AI Content Generation Engine",
+    description: "Advanced language models craft hyper-personalized emails that resonate with each prospect's unique situation",
+    icon: Brain,
+    color: "from-purple-500 to-pink-600",
+    bgGradient: "from-purple-500/10 to-pink-600/5",
+    position: { x: 500, y: 80 },
+    features: [
+      { icon: Cpu, label: "GPT-4 Processing", status: "active" },
+      { icon: Sparkles, label: "Personalization AI", status: "active" },
+      { icon: FileText, label: "Content Generation", status: "active" },
+      { icon: Filter, label: "Quality Filtering", status: "processing" }
+    ],
+    metrics: {
+      emailsGenerated: 1247,
+      personalizationScore: 94,
+      qualityScore: 98,
+      avgTime: "1.8s per email"
+    }
+  },
+  {
+    id: 3,
+    title: "Precision Delivery",
+    subtitle: "Smart Campaign Execution",
+    description: "Intelligent sending patterns and deliverability optimization ensure your emails reach the inbox and drive responses",
+    icon: Lightning,
+    color: "from-green-500 to-emerald-600",
+    bgGradient: "from-green-500/10 to-emerald-600/5",
+    position: { x: 900, y: 120 },
+    features: [
+      { icon: Send, label: "Smart Sending", status: "active" },
+      { icon: Shield, label: "Deliverability", status: "active" },
+      { icon: Calendar, label: "Follow-up Automation", status: "active" },
+      { icon: TrendingUp, label: "Performance Tracking", status: "monitoring" }
+    ],
+    metrics: {
+      deliveryRate: 98.7,
+      openRate: 73,
+      replyRate: 23,
+      callsBooked: 47
+    }
+  }
+];
+
+// Floating particles for background animation
+const FloatingParticle = ({ delay = 0, size = 4, color = "primary" }) => (
+  <motion.div
+    className={`absolute w-${size} h-${size} bg-${color}/20 rounded-full`}
+    initial={{ opacity: 0, scale: 0 }}
+    animate={{ 
+      opacity: [0, 1, 0],
+      scale: [0, 1, 0],
+      x: [0, Math.random() * 200 - 100],
+      y: [0, Math.random() * 200 - 100]
+    }}
+    transition={{
+      duration: 4,
+      delay,
+      repeat: Infinity,
+      repeatDelay: Math.random() * 2
+    }}
+    style={{
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`
+    }}
+  />
+);
+
+// Neural network connection lines
+const ConnectionLine = ({ from, to, active = false, delay = 0 }) => {
+  const pathRef = useRef(null);
   
+  return (
+    <motion.svg
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      style={{ zIndex: 1 }}
+    >
+      <motion.path
+        ref={pathRef}
+        d={`M ${from.x} ${from.y} Q ${(from.x + to.x) / 2} ${from.y - 100} ${to.x} ${to.y}`}
+        stroke={active ? "url(#activeGradient)" : "url(#inactiveGradient)"}
+        strokeWidth="3"
+        fill="none"
+        strokeDasharray="10,5"
+        initial={{ pathLength: 0, opacity: 0 }}
+        animate={{ 
+          pathLength: 1, 
+          opacity: active ? 0.8 : 0.3,
+          strokeDashoffset: active ? [0, -20] : 0
+        }}
+        transition={{ 
+          pathLength: { duration: 2, delay },
+          strokeDashoffset: { duration: 3, repeat: Infinity, ease: "linear" }
+        }}
+      />
+      <defs>
+        <linearGradient id="activeGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+          <stop offset="50%" stopColor="hsl(var(--accent))" stopOpacity="1" />
+          <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.8" />
+        </linearGradient>
+        <linearGradient id="inactiveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.3" />
+          <stop offset="100%" stopColor="hsl(var(--muted-foreground))" stopOpacity="0.1" />
+        </linearGradient>
+      </defs>
+    </motion.svg>
+  );
+};
+
+// Enhanced stage card component
+const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => {
+  const [hoveredFeature, setHoveredFeature] = useState(null);
+  const [currentProspect, setCurrentProspect] = useState(0);
+  const [currentEmail, setCurrentEmail] = useState(0);
+  const controls = useAnimation();
+
+  useEffect(() => {
+    if (isActive && isVisible) {
+      controls.start("active");
+      
+      // Cycle through prospects for stage 1
+      if (stage.id === 1) {
+        const interval = setInterval(() => {
+          setCurrentProspect(prev => (prev + 1) % mockProspects.length);
+        }, 3000);
+        return () => clearInterval(interval);
+      }
+      
+      // Cycle through emails for stage 2
+      if (stage.id === 2) {
+        const interval = setInterval(() => {
+          setCurrentEmail(prev => (prev + 1) % mockEmails.length);
+        }, 4000);
+        return () => clearInterval(interval);
+      }
+    }
+  }, [isActive, isVisible, controls, stage.id]);
+
+  const cardVariants = {
+    inactive: {
+      scale: 0.95,
+      opacity: 0.7,
+      y: 20,
+      filter: "blur(2px)"
+    },
+    active: {
+      scale: 1,
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)"
+    }
+  };
+
+  const Icon = stage.icon;
+
+  return (
+    <motion.div
+      className="relative group cursor-pointer"
+      variants={cardVariants}
+      animate={controls}
+      initial="inactive"
+      onClick={onActivate}
+      onHoverStart={() => !isActive && controls.start("active")}
+      onHoverEnd={() => !isActive && controls.start("inactive")}
+      style={{ zIndex: isActive ? 10 : 5 }}
+    >
+      {/* Background morphing blob */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${stage.bgGradient} rounded-3xl animate-morphing-blob opacity-50`} />
+      
+      {/* Neural network background */}
+      <div className="neural-network-bg rounded-3xl" />
+      
+      {/* Main card */}
+      <div className="process-card relative p-8 rounded-3xl transition-all duration-500 stable-container">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center space-x-4">
+            <div className={`p-4 rounded-2xl bg-gradient-to-br ${stage.color} text-white shadow-lg`}>
+              <Icon className="w-8 h-8" />
+            </div>
+            <div>
+              <h3 className="text-2xl font-bold text-foreground">{stage.title}</h3>
+              <p className="text-muted-foreground font-medium">{stage.subtitle}</p>
+            </div>
+          </div>
+          
+          {/* Status indicator */}
+          <div className="flex items-center space-x-2">
+            <div className={`w-3 h-3 rounded-full ${isActive ? 'bg-green-500 animate-pulse' : 'bg-gray-300'}`} />
+            <span className="text-sm font-medium text-muted-foreground">
+              {isActive ? 'Active' : 'Standby'}
+            </span>
+          </div>
+        </div>
+
+        {/* Description */}
+        <p className="text-foreground/80 mb-8 leading-relaxed">{stage.description}</p>
+
+        {/* Features grid */}
+        <div className="grid grid-cols-2 gap-4 mb-8">
+          {stage.features.map((feature, idx) => {
+            const FeatureIcon = feature.icon;
+            return (
+              <motion.div
+                key={feature.label}
+                className="flex items-center space-x-3 p-3 rounded-xl bg-background/50 border border-border/50 transition-all duration-300 hover:bg-background/80 hover:border-primary/30"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
+                transition={{ delay: idx * 0.1 }}
+                onHoverStart={() => setHoveredFeature(feature.label)}
+                onHoverEnd={() => setHoveredFeature(null)}
+              >
+                <FeatureIcon className={`w-5 h-5 ${
+                  feature.status === 'active' ? 'text-green-500' :
+                  feature.status === 'processing' ? 'text-yellow-500' :
+                  feature.status === 'monitoring' ? 'text-blue-500' :
+                  'text-gray-400'
+                }`} />
+                <span className="text-sm font-medium">{feature.label}</span>
+                {feature.status === 'active' && (
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse ml-auto" />
+                )}
+              </motion.div>
+            );
+          })}
+        </div>
+
+        {/* Dynamic content based on stage */}
+        <AnimatePresence mode="wait">
+          {isActive && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="space-y-6"
+            >
+              {/* Stage 1: Prospect Research */}
+              {stage.id === 1 && (
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-lg flex items-center space-x-2">
+                    <Database className="w-5 h-5 text-primary" />
+                    <span>Live Prospect Analysis</span>
+                  </h4>
+                  
+                  <motion.div
+                    key={currentProspect}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-xl border border-blue-200"
+                  >
+                    <div className="flex items-start space-x-4">
+                      <div className="text-3xl">{mockProspects[currentProspect].avatar}</div>
+                      <div className="flex-1">
+                        <h5 className="font-bold text-lg">{mockProspects[currentProspect].name}</h5>
+                        <p className="text-muted-foreground">{mockProspects[currentProspect].title} at {mockProspects[currentProspect].company}</p>
+                        <div className="mt-3 space-y-2">
+                          <div className="flex items-center space-x-2 text-sm">
+                            <Activity className="w-4 h-4 text-green-500" />
+                            <span>{mockProspects[currentProspect].linkedinActivity}</span>
+                          </div>
+                          <div className="flex flex-wrap gap-2">
+                            {mockProspects[currentProspect].buyingSignals.map((signal, idx) => (
+                              <span key={idx} className="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs font-medium">
+                                {signal}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Metrics */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {Object.entries(stage.metrics).map(([key, value]) => (
+                      <div key={key} className="text-center p-3 bg-background/50 rounded-lg">
+                        <div className="text-2xl font-bold text-primary">{value}</div>
+                        <div className="text-xs text-muted-foreground capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stage 2: Email Generation */}
+              {stage.id === 2 && (
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-lg flex items-center space-x-2">
+                    <Sparkles className="w-5 h-5 text-primary" />
+                    <span>AI Email Generation</span>
+                  </h4>
+                  
+                  <motion.div
+                    key={currentEmail}
+                    initial={{ opacity: 0, x: 20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="bg-gradient-to-r from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-200"
+                  >
+                    <div className="space-y-4">
+                      <div>
+                        <div className="text-sm text-muted-foreground mb-1">Subject Line:</div>
+                        <div className="font-semibold">{mockEmails[currentEmail].subject}</div>
+                      </div>
+                      
+                      <div>
+                        <div className="text-sm text-muted-foreground mb-1">Preview:</div>
+                        <div className="text-sm leading-relaxed">{mockEmails[currentEmail].preview}</div>
+                      </div>
+                      
+                      <div className="flex items-center justify-between pt-4 border-t border-purple-200">
+                        <div className="flex space-x-4 text-sm">
+                          <span className="flex items-center space-x-1">
+                            <Eye className="w-4 h-4 text-blue-500" />
+                            <span>{mockEmails[currentEmail].openRate}% open</span>
+                          </span>
+                          <span className="flex items-center space-x-1">
+                            <MessageSquare className="w-4 h-4 text-green-500" />
+                            <span>{mockEmails[currentEmail].replyRate}% reply</span>
+                          </span>
+                        </div>
+                        <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                          {mockEmails[currentEmail].valueProp}
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Generation metrics */}
+                  <div className="grid grid-cols-2 gap-4">
+                    {Object.entries(stage.metrics).map(([key, value]) => (
+                      <div key={key} className="text-center p-3 bg-background/50 rounded-lg">
+                        <div className="text-2xl font-bold text-primary">{value}</div>
+                        <div className="text-xs text-muted-foreground capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Stage 3: Campaign Results */}
+              {stage.id === 3 && (
+                <div className="space-y-4">
+                  <h4 className="font-semibold text-lg flex items-center space-x-2">
+                    <TrendingUp className="w-5 h-5 text-primary" />
+                    <span>Campaign Performance</span>
+                  </h4>
+                  
+                  <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200">
+                    <div className="grid grid-cols-2 gap-6">
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium">Delivery Rate</span>
+                            <span className="text-sm font-bold text-green-600">{stage.metrics.deliveryRate}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div 
+                              className="bg-green-500 h-2 rounded-full"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${stage.metrics.deliveryRate}%` }}
+                              transition={{ duration: 2, delay: 0.5 }}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium">Open Rate</span>
+                            <span className="text-sm font-bold text-blue-600">{stage.metrics.openRate}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div 
+                              className="bg-blue-500 h-2 rounded-full"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${stage.metrics.openRate}%` }}
+                              transition={{ duration: 2, delay: 1 }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      
+                      <div className="space-y-4">
+                        <div>
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-sm font-medium">Reply Rate</span>
+                            <span className="text-sm font-bold text-purple-600">{stage.metrics.replyRate}%</span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <motion.div 
+                              className="bg-purple-500 h-2 rounded-full"
+                              initial={{ width: 0 }}
+                              animate={{ width: `${stage.metrics.replyRate}%` }}
+                              transition={{ duration: 2, delay: 1.5 }}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="text-center p-3 bg-white rounded-lg border border-green-300">
+                          <div className="text-3xl font-bold text-green-600">{stage.metrics.callsBooked}</div>
+                          <div className="text-sm text-muted-foreground">Calls Booked</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Floating particles around active stage */}
+      {isActive && (
+        <>
+          {[...Array(8)].map((_, i) => (
+            <FloatingParticle key={i} delay={i * 0.2} size={Math.random() > 0.5 ? 2 : 3} />
+          ))}
+        </>
+      )}
+    </motion.div>
+  );
+};
+
+// Main component
+export const ProcessVisualization = () => {
+  const [activeStage, setActiveStage] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [viewMode, setViewMode] = useState('desktop'); // desktop, tablet, mobile
   const { ref, inView } = useInView({
     triggerOnce: true,
     threshold: 0.1,
   });
 
+  // Auto-progress through stages
   useEffect(() => {
-    if (inView) {
-      setIsVisible(true);
-      // Auto-progress through stages
-      const interval = setInterval(() => {
-        if (isPlaying) {
-          setActiveStage((prev) => (prev + 1) % 3);
-        }
-      }, 5000);
-      return () => clearInterval(interval);
-    }
+    if (!inView || !isPlaying) return;
+
+    const interval = setInterval(() => {
+      setActiveStage(prev => (prev + 1) % processStages.length);
+    }, 8000);
+
+    return () => clearInterval(interval);
   }, [inView, isPlaying]);
 
-  // Auto-cycle through emails
+  // Responsive view detection
   useEffect(() => {
-    const emailInterval = setInterval(() => {
-      if (activeStage === 2 && isPlaying) {
-        setCurrentEmailIndex((prev) => (prev + 1) % mockEmails.length);
-      }
-    }, 3000);
-    return () => clearInterval(emailInterval);
-  }, [activeStage, isPlaying]);
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 768) setViewMode('mobile');
+      else if (width < 1024) setViewMode('tablet');
+      else setViewMode('desktop');
+    };
 
-  // Secret easter egg
-  const handleSecretClick = () => {
-    setSecretClicks(prev => {
-      const newCount = prev + 1;
-      if (newCount >= 7) {
-        setShowEasterEgg(true);
-        setTimeout(() => setShowEasterEgg(false), 4000);
-        return 0;
-      }
-      return newCount;
-    });
-  };
-
-  const stages = [
-    {
-      id: 1,
-      title: "Mission Control",
-      subtitle: "Understand the Objective",
-      description: "Define your ideal customer profile, goals, and outreach strategy",
-      icon: Target,
-      color: "from-blue-500/20 to-blue-600/10",
-      borderColor: "border-blue-500/50",
-      glowColor: "shadow-blue-500/30",
-      position: { x: 50, y: 50 },
-      size: { width: 400, height: 300 },
-      content: {
-        type: "foundation",
-        data: {
-          target: "SaaS Founders",
-          goal: "10 calls/week",
-          icp: "2-20 person teams",
-          budget: "$50-200K ARR",
-          industry: "B2B SaaS",
-          location: "US/Canada"
-        }
-      }
-    },
-    {
-      id: 2,
-      title: "Intelligence Engine",
-      subtitle: "Build the Model",
-      description: "Multi-stage AI system for data collection and personalization",
-      icon: Brain,
-      color: "from-purple-500/20 to-indigo-600/10",
-      borderColor: "border-purple-500/50",
-      glowColor: "shadow-purple-500/30",
-      position: { x: 500, y: 30 },
-      size: { width: 500, height: 400 },
-      content: {
-        type: "process",
-        subStages: [
-          {
-            id: "2.1",
-            title: "Collect Leads",
-            description: "Scrape and aggregate prospect data from multiple sources",
-            icon: Database,
-            color: "text-green-500",
-            sources: ["LinkedIn", "Apollo", "Company Websites", "Social Media"],
-            activeSources: ["LinkedIn", "Apollo"],
-            data: mockProspects
-          },
-          {
-            id: "2.2",
-            title: "Research Prospects",
-            description: "AI analyzes profiles and identifies personalization angles",
-            icon: Search,
-            color: "text-purple-500",
-            insights: [
-              "Posted about hiring SDRs last week",
-              "Company raised $2M Series A",
-              "Pain point: Manual outreach scaling",
-              "Best contact time: Tuesday 10AM"
-            ]
-          },
-          {
-            id: "2.3",
-            title: "Personalize Emails",
-            description: "Generate hyper-personalized cold emails",
-            icon: FileText,
-            color: "text-orange-500",
-            emails: mockEmails
-          }
-        ]
-      }
-    },
-    {
-      id: 3,
-      title: "Conversion Engine",
-      subtitle: "Launch & Book Calls",
-      description: "Deploy campaigns and convert responses to qualified meetings",
-      icon: Zap,
-      color: "from-green-500/20 to-emerald-600/10",
-      borderColor: "border-green-500/50",
-      glowColor: "shadow-green-500/30",
-      position: { x: 1050, y: 50 },
-      size: { width: 400, height: 300 },
-      content: {
-        type: "outcome",
-        metrics: mockMetrics
-      }
-    }
-  ];
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const connections = [
-    { 
-      from: { x: 450, y: 200 }, 
-      to: { x: 500, y: 230 }, 
-      color: "hsl(var(--primary))",
-      stage: 0
-    },
-    { 
-      from: { x: 1000, y: 230 }, 
-      to: { x: 1050, y: 200 }, 
-      color: "hsl(var(--accent))",
-      stage: 1
-    }
+    { from: { x: 400, y: 200 }, to: { x: 500, y: 180 }, active: activeStage >= 1 },
+    { from: { x: 800, y: 180 }, to: { x: 900, y: 220 }, active: activeStage >= 2 }
   ];
-
-  const floatingElements = [
-    { id: "f1", icon: Sparkles, pos: { x: 200, y: 100 }, delay: 0, stage: 0 },
-    { id: "f2", icon: MessageSquare, pos: { x: 700, y: 80 }, delay: 1, stage: 1 },
-    { id: "f3", icon: Activity, pos: { x: 1200, y: 120 }, delay: 2, stage: 2 },
-    { id: "f4", icon: BarChart3, pos: { x: 150, y: 400 }, delay: 0.5, stage: 0 },
-    { id: "f5", icon: Globe, pos: { x: 1000, y: 450 }, delay: 1.5, stage: 2 },
-    { id: "f6", icon: Users, pos: { x: 600, y: 450 }, delay: 1, stage: 1 },
-    { id: "f7", icon: TrendingUp, pos: { x: 300, y: 200 }, delay: 0.8, stage: 0 },
-    { id: "f8", icon: Calendar, pos: { x: 1100, y: 300 }, delay: 2.2, stage: 2 }
-  ];
-
-  const renderMacOSWindow = (stage: typeof stages[0], isActive: boolean) => {
-    const Icon = stage.icon;
-    const isExpanded = expandedWindow === stage.id;
-    
-    return (
-      <motion.div
-        key={stage.id}
-        className="absolute cursor-pointer"
-        style={{ 
-          left: stage.position.x,
-          top: stage.position.y,
-          width: isExpanded ? stage.size.width * 1.5 : stage.size.width,
-          height: isExpanded ? stage.size.height * 1.5 : stage.size.height,
-          zIndex: isExpanded ? 50 : 10
-        }}
-        initial={{ opacity: 0, scale: 0.8, y: 50 }}
-        animate={{ 
-          opacity: isVisible ? 1 : 0, 
-          scale: isVisible ? (isActive ? 1.05 : 1) : 0.8,
-          y: isVisible ? 0 : 50
-        }}
-        transition={{ delay: 0.5 + stage.id * 0.3, duration: 0.8 }}
-        onHoverStart={() => setHoveredElement(`stage-${stage.id}`)}
-        onHoverEnd={() => setHoveredElement(null)}
-        onClick={() => {
-          setActiveStage(stage.id - 1);
-          setExpandedWindow(isExpanded ? null : stage.id);
-        }}
-      >
-        {/* Window frame */}
-        <div className={`
-          relative w-full h-full rounded-2xl glass-card
-          bg-gradient-to-br ${stage.color}
-          border-2 transition-all duration-500
-          ${isActive ? `${stage.borderColor} ${stage.glowColor} shadow-2xl` : 'border-border/50'}
-          ${hoveredElement === `stage-${stage.id}` ? 'shadow-glow transform scale-102' : ''}
-          ${isExpanded ? 'shadow-2xl' : ''}
-        `}>
-          {/* macOS title bar */}
-          <div className="flex items-center justify-between p-4 border-b border-border/20">
-            <div className="flex items-center space-x-2">
-              <div className="flex space-x-1.5">
-                <div 
-                  className="w-3 h-3 rounded-full bg-red-500/80 cursor-pointer hover:bg-red-500 transition-colors" 
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleSecretClick();
-                  }}
-                />
-                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                <div className="w-3 h-3 rounded-full bg-green-500/80" />
-              </div>
-              <div className="flex items-center space-x-2 ml-4">
-                <Icon className="w-5 h-5 text-foreground/80" />
-                <span className="font-semibold text-sm">{stage.title}</span>
-                {isActive && (
-                  <motion.div
-                    className="w-2 h-2 rounded-full bg-primary"
-                    animate={{ scale: [1, 1.2, 1] }}
-                    transition={{ repeat: Infinity, duration: 2 }}
-                  />
-                )}
-              </div>
-            </div>
-            <div className="flex items-center space-x-1">
-              <button 
-                className="p-1 hover:bg-muted/50 rounded transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Minimize2 className="w-3 h-3" />
-              </button>
-              <button 
-                className="p-1 hover:bg-muted/50 rounded transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <Maximize2 className="w-3 h-3" />
-              </button>
-              <button 
-                className="p-1 hover:bg-muted/50 rounded transition-colors"
-                onClick={(e) => e.stopPropagation()}
-              >
-                <X className="w-3 h-3" />
-              </button>
-            </div>
-          </div>
-
-          {/* Window content */}
-          <div className="p-4 space-y-4 overflow-hidden">
-            <div className="text-center">
-              <h3 className="font-bold text-lg mb-1">{stage.subtitle}</h3>
-              <div className={`
-                w-12 h-12 mx-auto rounded-xl bg-gradient-to-br from-primary to-primary/80 
-                flex items-center justify-center mb-3
-                ${isActive ? 'animate-pulse shadow-lg shadow-primary/50' : ''}
-              `}>
-                <Icon className="w-6 h-6 text-white" />
-              </div>
-              <p className="text-sm text-muted-foreground">{stage.description}</p>
-            </div>
-
-            {/* Stage-specific content */}
-            <AnimatePresence mode="wait">
-              {isActive && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: 'auto' }}
-                  exit={{ opacity: 0, height: 0 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  {stage.content.type === 'foundation' && (
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-3">
-                        {Object.entries(stage.content.data).map(([key, value], index) => (
-                          <motion.div
-                            key={key}
-                            className="p-3 rounded-lg bg-background/30 border border-border/20"
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: index * 0.1 }}
-                          >
-                            <div className="text-xs font-semibold text-primary uppercase tracking-wide">
-                              {key.replace(/([A-Z])/g, ' $1').trim()}
-                            </div>
-                            <div className="text-sm font-medium">{value}</div>
-                          </motion.div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {stage.content.type === 'process' && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between">
-                        <h4 className="font-semibold text-sm">AI Processing Pipeline</h4>
-                        <div className="flex items-center space-x-2">
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setIsPlaying(!isPlaying);
-                            }}
-                            className="p-1 hover:bg-muted/50 rounded transition-colors"
-                          >
-                            {isPlaying ? <Pause className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveSubStage((prev) => (prev + 1) % 3);
-                            }}
-                            className="p-1 hover:bg-muted/50 rounded transition-colors"
-                          >
-                            <RotateCcw className="w-3 h-3" />
-                          </button>
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-3 gap-3">
-                        {stage.content.subStages.map((subStage, index) => {
-                          const SubIcon = subStage.icon;
-                          const isSubActive = activeSubStage === index;
-                          
-                          return (
-                            <motion.div
-                              key={subStage.id}
-                              className={`
-                                relative p-3 rounded-lg glass-card cursor-pointer
-                                transition-all duration-300 group
-                                ${isSubActive ? 'shadow-glow border-2 border-primary/50 scale-105' : 'hover:shadow-md hover:scale-102'}
-                              `}
-                              initial={{ opacity: 0, y: 20 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: 0.6 + (index * 0.2) }}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveSubStage(index);
-                              }}
-                            >
-                              <div className="text-center space-y-2">
-                                <div className={`
-                                  inline-flex items-center justify-center w-8 h-8 rounded-lg
-                                  bg-gradient-to-br from-primary/20 to-primary/10
-                                  ${isSubActive ? 'animate-bounce-subtle bg-primary text-white' : ''}
-                                `}>
-                                  <SubIcon className={`w-4 h-4 ${isSubActive ? 'text-white' : 'text-primary'}`} />
-                                </div>
-                                
-                                <div>
-                                  <h5 className="font-bold text-xs">{subStage.title}</h5>
-                                  <p className="text-[10px] text-muted-foreground">{subStage.description}</p>
-                                </div>
-
-                                {/* Dynamic content for active sub-stage */}
-                                <AnimatePresence mode="wait">
-                                  {isSubActive && (
-                                    <motion.div
-                                      initial={{ opacity: 0, height: 0 }}
-                                      animate={{ opacity: 1, height: 'auto' }}
-                                      exit={{ opacity: 0, height: 0 }}
-                                      className="space-y-2"
-                                    >
-                                      {/* Sources for Collect Leads */}
-                                      {subStage.sources && (
-                                        <div className="space-y-1">
-                                          {subStage.sources.map((source, idx) => (
-                                            <motion.div
-                                              key={source}
-                                              initial={{ opacity: 0, x: -10 }}
-                                              animate={{ opacity: 1, x: 0 }}
-                                              transition={{ delay: idx * 0.1 }}
-                                              className={`
-                                                flex items-center space-x-1 p-1 rounded text-[10px]
-                                                ${subStage.activeSources?.includes(source) 
-                                                  ? 'bg-success/10 text-success' 
-                                                  : 'bg-muted/50 text-muted-foreground'
-                                                }
-                                              `}
-                                            >
-                                              <Globe className="w-3 h-3" />
-                                              <span>{source}</span>
-                                              {subStage.activeSources?.includes(source) && (
-                                                <Activity className="w-2 h-2 animate-pulse" />
-                                              )}
-                                            </motion.div>
-                                          ))}
-                                        </div>
-                                      )}
-
-                                      {/* Insights for Research */}
-                                      {subStage.insights && (
-                                        <div className="space-y-1">
-                                          {subStage.insights.slice(0, 2).map((insight, idx) => (
-                                            <motion.div
-                                              key={insight}
-                                              initial={{ opacity: 0, scale: 0.95 }}
-                                              animate={{ opacity: 1, scale: 1 }}
-                                              transition={{ delay: idx * 0.15 }}
-                                              className="p-1 bg-primary/5 rounded text-[9px] text-foreground/80 border-l border-primary"
-                                            >
-                                              "{insight}"
-                                            </motion.div>
-                                          ))}
-                                        </div>
-                                      )}
-
-                                      {/* Emails for Personalization */}
-                                      {subStage.emails && (
-                                        <div className="space-y-1">
-                                          <motion.div
-                                            initial={{ opacity: 0, y: 5 }}
-                                            animate={{ opacity: 1, y: 0 }}
-                                            className="p-2 bg-gradient-to-r from-orange-500/10 to-orange-500/5 rounded text-[9px] border border-orange-500/20"
-                                          >
-                                            <FileText className="w-3 h-3 text-orange-500 mb-1" />
-                                            "{subStage.emails[currentEmailIndex]?.preview.slice(0, 50)}..."
-                                          </motion.div>
-                                        </div>
-                                      )}
-                                    </motion.div>
-                                  )}
-                                </AnimatePresence>
-                              </div>
-                            </motion.div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {stage.content.type === 'outcome' && (
-                    <div className="space-y-3">
-                      <div className="grid grid-cols-2 gap-3">
-                        {Object.entries(stage.content.metrics).map(([key, value], index) => (
-                          <motion.div
-                            key={key}
-                            className="p-3 rounded-lg bg-background/30 border border-border/20 text-center"
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ delay: index * 0.1 }}
-                          >
-                            <div className="text-lg font-bold text-success">
-                              {typeof value === 'number' ? value.toLocaleString() : value}
-                            </div>
-                            <div className="text-xs text-muted-foreground capitalize">
-                              {key.replace(/([A-Z])/g, ' $1').trim()}
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
-                      
-                      {/* Live activity feed */}
-                      <div className="space-y-2">
-                        <h5 className="font-semibold text-xs">Live Activity</h5>
-                        <div className="space-y-1">
-                          {[
-                            "📧 Email sent to Sarah Chen",
-                            "📱 Reply received from Marcus",
-                            "📅 Call booked with Emily",
-                            "📊 Open rate: 73%"
-                          ].map((activity, index) => (
-                            <motion.div
-                              key={activity}
-                              initial={{ opacity: 0, x: -20 }}
-                              animate={{ opacity: 1, x: 0 }}
-                              transition={{ delay: index * 0.2 }}
-                              className="text-[10px] text-muted-foreground flex items-center space-x-1"
-                            >
-                              <div className="w-1 h-1 rounded-full bg-success animate-pulse" />
-                              <span>{activity}</span>
-                            </motion.div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </div>
-      </motion.div>
-    );
-  };
 
   return (
-    <div ref={ref} className="relative h-screen overflow-hidden bg-gradient-to-br from-background via-muted/5 to-accent/5">
-      {/* macOS-style background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="grid grid-cols-16 grid-rows-12 h-full w-full">
-          {[...Array(192)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="border border-foreground/10"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: isVisible ? 1 : 0 }}
-              transition={{ delay: i * 0.005, duration: 0.3 }}
-            />
-          ))}
+    <div ref={ref} className="relative min-h-screen bg-gradient-to-br from-background via-muted/5 to-accent/5 overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute inset-0">
+        {/* Animated grid */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="grid grid-cols-12 grid-rows-8 h-full w-full">
+            {[...Array(96)].map((_, i) => (
+              <motion.div
+                key={i}
+                className="border border-foreground/10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: inView ? 1 : 0 }}
+                transition={{ delay: i * 0.01, duration: 0.3 }}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* Floating particles */}
-      {floatingElements.map((element) => {
-        const Icon = element.icon;
-        const isActive = activeStage === element.stage;
-        
-        return (
+        {/* Floating orbs */}
+        {[...Array(12)].map((_, i) => (
           <motion.div
-            key={element.id}
-            className="absolute pointer-events-none"
-            style={{ left: element.pos.x, top: element.pos.y }}
-            initial={{ opacity: 0, scale: 0, rotate: -180 }}
+            key={i}
+            className="absolute w-32 h-32 bg-gradient-to-br from-primary/10 to-accent/10 rounded-full blur-xl"
+            initial={{ opacity: 0, scale: 0 }}
             animate={{ 
-              opacity: isVisible ? (isActive ? 0.8 : 0.4) : 0, 
-              scale: isVisible ? (isActive ? 1.2 : 1) : 0,
-              rotate: 0,
-              y: isVisible ? [0, -15, 0] : 0
+              opacity: inView ? [0.3, 0.6, 0.3] : 0,
+              scale: inView ? [1, 1.2, 1] : 0,
+              x: [0, Math.random() * 100 - 50, 0],
+              y: [0, Math.random() * 100 - 50, 0]
             }}
-            transition={{ 
-              delay: element.delay,
-              duration: 1.5,
-              y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
+            transition={{
+              duration: 10 + Math.random() * 5,
+              repeat: Infinity,
+              delay: i * 0.5
             }}
-          >
-            <Icon className={`w-6 h-6 ${isActive ? 'text-primary' : 'text-primary/40'}`} />
-          </motion.div>
-        );
-      })}
-
-      {/* Connection lines */}
-      <svg className="absolute inset-0 w-full h-full pointer-events-none">
-        {connections.map((connection, index) => (
-          <motion.path
-            key={index}
-            d={`M ${connection.from.x} ${connection.from.y} Q ${(connection.from.x + connection.to.x) / 2} ${connection.from.y - 80} ${connection.to.x} ${connection.to.y}`}
-            stroke={connection.color}
-            strokeWidth="3"
-            fill="none"
-            strokeDasharray="15,8"
-            initial={{ pathLength: 0, opacity: 0 }}
-            animate={{ 
-              pathLength: isVisible ? 1 : 0, 
-              opacity: isVisible ? (activeStage >= connection.stage ? 0.8 : 0.3) : 0 
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`
             }}
-            transition={{ delay: 1 + index * 0.5, duration: 2 }}
           />
         ))}
-      </svg>
+      </div>
 
-      {/* Main windows */}
-      {stages.map((stage) => renderMacOSWindow(stage, activeStage === stage.id - 1))}
+      {/* Connection lines */}
+      {connections.map((connection, index) => (
+        <ConnectionLine
+          key={index}
+          from={connection.from}
+          to={connection.to}
+          active={connection.active}
+          delay={index * 0.5}
+        />
+      ))}
 
-      {/* Control panel */}
-      <motion.div
-        className="absolute bottom-6 left-6 z-40"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 20 }}
-        transition={{ delay: 2 }}
-      >
-        <div className="glass-card p-4 rounded-xl border border-border/20 shadow-lg">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="p-2 rounded-lg bg-primary/10 hover:bg-primary/20 transition-colors"
-              >
-                {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-              </button>
-              <button
-                onClick={() => setActiveStage(0)}
-                className="p-2 rounded-lg bg-muted/50 hover:bg-muted transition-colors"
-              >
-                <RotateCcw className="w-4 h-4" />
-              </button>
-            </div>
+      {/* Main content */}
+      <div className="relative z-10 container mx-auto px-4 py-20">
+        {/* Header */}
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
+          transition={{ duration: 0.8 }}
+        >
+          <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
+            How Our <span className="text-primary">AI System</span> Works
+          </h2>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
+            Watch our sophisticated AI pipeline transform raw prospect data into 
+            <span className="font-semibold text-foreground"> booked sales calls</span> through 
+            intelligent automation and personalization.
+          </p>
+        </motion.div>
+
+        {/* Control panel */}
+        <motion.div
+          className="flex justify-center mb-12"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
+          transition={{ delay: 0.5 }}
+        >
+          <div className="flex items-center space-x-6 bg-background/80 backdrop-blur-md border border-border/50 rounded-2xl p-4 shadow-lg">
+            <button
+              onClick={() => setIsPlaying(!isPlaying)}
+              className="flex items-center space-x-2 px-4 py-2 bg-primary text-primary-foreground rounded-xl font-medium transition-all hover:bg-primary/90"
+            >
+              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+              <span>{isPlaying ? 'Pause' : 'Play'}</span>
+            </button>
             
             <div className="flex items-center space-x-2">
-              {stages.map((_, index) => (
+              {processStages.map((_, index) => (
                 <button
                   key={index}
                   onClick={() => setActiveStage(index)}
-                  className={`
-                    w-3 h-3 rounded-full transition-all duration-300
-                    ${activeStage === index 
+                  className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                    activeStage === index 
                       ? 'bg-primary scale-125 shadow-lg shadow-primary/50' 
                       : 'bg-muted-foreground/30 hover:bg-muted-foreground/50 hover:scale-110'
-                    }
-                  `}
+                  }`}
                 />
               ))}
             </div>
+
+            <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+              <Monitor className="w-4 h-4" />
+              <span className="capitalize">{viewMode}</span>
+            </div>
           </div>
+        </motion.div>
+
+        {/* Process stages */}
+        <div className={`grid gap-8 ${
+          viewMode === 'mobile' ? 'grid-cols-1' : 
+          viewMode === 'tablet' ? 'grid-cols-2' : 
+          'grid-cols-3'
+        }`}>
+          {processStages.map((stage, index) => (
+            <motion.div
+              key={stage.id}
+              initial={{ opacity: 0, y: 50, scale: 0.9 }}
+              animate={{ 
+                opacity: inView ? 1 : 0, 
+                y: inView ? 0 : 50,
+                scale: inView ? 1 : 0.9
+              }}
+              transition={{ 
+                duration: 0.8, 
+                delay: 0.2 + (index * 0.2),
+                type: "spring",
+                stiffness: 100
+              }}
+            >
+              <ProcessStageCard
+                stage={stage}
+                isActive={activeStage === index}
+                isVisible={inView}
+                onActivate={() => setActiveStage(index)}
+                index={index}
+              />
+            </motion.div>
+          ))}
         </div>
-      </motion.div>
 
-      {/* Easter egg */}
-      <AnimatePresence>
-        {showEasterEgg && (
-          <motion.div
-            className="absolute top-4 left-1/2 transform -translate-x-1/2 z-50"
-            initial={{ opacity: 0, scale: 0.5, y: -20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: -20 }}
-          >
-            <div className="glass-card p-4 rounded-xl border-2 border-primary/50 shadow-glow">
-              <div className="flex items-center space-x-2">
-                <Cpu className="w-5 h-5 text-primary animate-spin" />
-                <span className="font-bold text-primary">AI Override Activated!</span>
-                <Sparkles className="w-4 h-4 text-accent animate-pulse" />
-                <span className="text-sm text-muted-foreground">You found the secret!</span>
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+        {/* Bottom metrics */}
+        <motion.div
+          className="mt-16 text-center"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
+          transition={{ delay: 1.5 }}
+        >
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            {[
+              { label: "Prospects Analyzed", value: "15,420+", icon: Users },
+              { label: "Emails Generated", value: "1,247", icon: Mail },
+              { label: "Average Accuracy", value: "96.4%", icon: Target },
+              { label: "Calls Booked", value: "47", icon: Calendar }
+            ].map((metric, index) => {
+              const MetricIcon = metric.icon;
+              return (
+                <motion.div
+                  key={metric.label}
+                  className="bg-background/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center"
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.9 }}
+                  transition={{ delay: 1.8 + (index * 0.1) }}
+                >
+                  <MetricIcon className="w-8 h-8 text-primary mx-auto mb-3" />
+                  <div className="text-2xl font-bold text-foreground mb-1">{metric.value}</div>
+                  <div className="text-sm text-muted-foreground">{metric.label}</div>
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
+      </div>
 
-      {/* Interactive tooltip */}
-      <AnimatePresence>
-        {hoveredElement && (
-          <motion.div
-            className="fixed bottom-8 left-1/2 transform -translate-x-1/2 z-40 pointer-events-none"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-          >
-            <div className="glass-card px-4 py-2 rounded-full border border-primary/20">
-              <span className="text-sm font-medium">
-                {hoveredElement.includes('stage-1') ? 'Mission Control' :
-                 hoveredElement.includes('stage-2') ? 'Intelligence Engine' :
-                 hoveredElement.includes('stage-3') ? 'Conversion Engine' : 'System Component'}
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {/* Performance indicator */}
+
     </div>
   );
 };
