@@ -972,7 +972,7 @@ export const ProcessVisualization = () => {
           className="text-center mb-16"
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.6, type: "spring", stiffness: 120 }}
         >
           <h2 className="text-4xl md:text-6xl font-bold text-foreground mb-6">
             How Our <span className="text-primary">AI System</span> Works
@@ -989,7 +989,7 @@ export const ProcessVisualization = () => {
           className="flex justify-center mb-12"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 20 }}
-          transition={{ delay: 0.5 }}
+          transition={{ delay: 0.2, duration: 0.5 }}
         >
           <div className="flex items-center space-x-6 bg-background/80 backdrop-blur-md border border-border/50 rounded-2xl p-4 shadow-lg">
             <InteractiveTooltip content={isPlaying ? 'Pause automation' : 'Resume automation'}>
@@ -1053,10 +1053,10 @@ export const ProcessVisualization = () => {
                 scale: inView ? 1 : 0.9
               }}
               transition={{ 
-                duration: 0.8, 
+                duration: 0.6,
                 delay: 0.2 + (index * 0.2),
                 type: "spring",
-                stiffness: 100
+                stiffness: 110
               }}
             >
               <ProcessStageCard
@@ -1070,41 +1070,6 @@ export const ProcessVisualization = () => {
           ))}
         </div>
 
-        {/* Enhanced bottom metrics with fixed positioning */}
-        {showMetrics && (
-          <motion.div
-            className="mt-16 text-center"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: inView ? 1 : 0, y: inView ? 0 : 30 }}
-            transition={{ delay: 1.5 }}
-          >
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-              {[
-                { label: "Prospects Analyzed", value: "15,420+", icon: Users, color: "blue" },
-                { label: "Emails Generated", value: "1,247", icon: Mail, color: "purple" },
-                { label: "Average Accuracy", value: "96.4%", icon: Target, color: "green" },
-                { label: "Calls Booked", value: "47", icon: Calendar, color: "orange" }
-              ].map((metric, index) => {
-                const MetricIcon = metric.icon;
-                return (
-                  <InteractiveTooltip key={metric.label} content={`${metric.label}: ${metric.value}`}>
-                    <motion.div
-                      className="bg-background/60 backdrop-blur-sm border border-border/50 rounded-2xl p-6 text-center cursor-pointer hover:bg-background/80 transition-all duration-300 hover:scale-105"
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: inView ? 1 : 0, scale: inView ? 1 : 0.9 }}
-                      transition={{ delay: 1.8 + (index * 0.1) }}
-                      whileHover={{ y: -5 }}
-                    >
-                      <MetricIcon className={`w-8 h-8 text-${metric.color}-500 mx-auto mb-3`} />
-                      <div className="text-2xl font-bold text-foreground mb-1">{metric.value}</div>
-                      <div className="text-sm text-muted-foreground">{metric.label}</div>
-                    </motion.div>
-                  </InteractiveTooltip>
-                );
-              })}
-            </div>
-          </motion.div>
-        )}
       </div>
 
       {/* Performance indicator */}
