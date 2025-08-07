@@ -417,8 +417,6 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
       onHoverEnd={() => !isActive && controls.start("inactive")}
       style={{ 
         zIndex: isActive ? 10 : 5,
-        minHeight: '600px',
-        maxHeight: '800px'
       }}
     >
       {/* Enhanced background with multiple layers */}
@@ -910,8 +908,7 @@ export const ProcessVisualization = () => {
   return (
     <div 
       ref={ref} 
-      className="relative bg-gradient-to-br from-background via-muted/5 to-accent/5 overflow-hidden"
-      style={{ minHeight: '100vh', maxHeight: '100vh' }}
+      className="relative bg-gradient-to-br from-background via-muted/5 to-accent/5"
     >
       {/* Enhanced background elements */}
       <div className="absolute inset-0">
@@ -969,7 +966,7 @@ export const ProcessVisualization = () => {
       ))}
 
       {/* Main content with fixed container */}
-      <div className="relative z-10 container mx-auto px-4 py-20 h-full">
+      <div className="relative z-10 container mx-auto px-4 py-12 h-full">
         {/* Enhanced header */}
         <motion.div
           className="text-center mb-16"
@@ -1045,7 +1042,6 @@ export const ProcessVisualization = () => {
             viewMode === 'tablet' ? 'grid-cols-2' : 
             'grid-cols-3'
           }`}
-          style={{ minHeight: '600px' }}
         >
           {processStages.map((stage, index) => (
             <motion.div
