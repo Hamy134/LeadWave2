@@ -42,14 +42,14 @@ export const FAQ: React.FC = () => {
   };
 
   return (
-    <section className="py-24 bg-gray-50">
-      <div className="max-w-4xl mx-auto px-6">
+    <section className="py-16 md:py-24 bg-gray-50">
+      <div className="container-responsive max-w-4xl">
         <ScrollAnimation animation="slideUp">
           <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Frequently Asked Questions
             </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
               Everything you need to know about our <span className="font-semibold text-gray-900 underline-animation">AI-powered lead generation</span> system
             </p>
           </div>
@@ -61,10 +61,10 @@ export const FAQ: React.FC = () => {
               <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden stable-container">
                 <button
                   onClick={() => toggleFAQ(index)}
-                  className="w-full px-6 py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200 stable-animation"
+                  className="w-full px-4 md:px-6 py-4 md:py-5 text-left flex items-center justify-between hover:bg-gray-50 transition-colors duration-200 stable-animation touch-target"
                   style={{ transform: 'translateZ(0)' }}
                 >
-                  <h3 className="font-semibold text-gray-900 pr-4">{faq.question}</h3>
+                  <h3 className="font-semibold text-gray-900 pr-4 text-sm md:text-base">{faq.question}</h3>
                   {openIndex === index ? (
                     <ChevronUp className="w-5 h-5 text-blue-600 flex-shrink-0" />
                   ) : (
@@ -75,8 +75,8 @@ export const FAQ: React.FC = () => {
                 <div className={`transition-all duration-300 ease-in-out stable-animation ${
                   openIndex === index ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
                 } overflow-hidden`}>
-                  <div className="px-6 pb-5">
-                    <p className="text-gray-600 leading-relaxed">{faq.answer}</p>
+                  <div className="px-4 md:px-6 pb-4 md:pb-5">
+                    <p className="text-gray-600 leading-relaxed text-sm md:text-base">{faq.answer}</p>
                   </div>
                 </div>
               </div>

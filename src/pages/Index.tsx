@@ -18,7 +18,6 @@ import { EmailExampleCycler } from '../components/EmailExampleCycler';
 import { ProcessVisualization } from '../components/ProcessVisualization';
 import { CountUpAnimation } from '../components/CountUpAnimation';
 import { CalComButton } from '../components/CalComButton';
-import heroImage from '../assets/hero-bg.jpg';
 import { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
 import { FAQ } from '../components/FAQ';
@@ -101,20 +100,20 @@ const faqs = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative overflow-hidden stable-container">
+      <section className="relative overflow-hidden stable-container py-12 md:py-20 lg:py-32">
         {/* Background */}
 
 
-        <div className="relative z-10 container mx-auto px-4 py-20 lg:py-32">
+        <div className="relative z-10 container-responsive">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
             {/* Hero Content */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="space-y-8 max-w-full lg:max-w-full lg:pr-12 stable-animation"
+              className="space-y-6 md:space-y-8 stable-animation"
             >
               <div className="space-y-6">
                 <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold">
@@ -122,13 +121,13 @@ const Index = () => {
                   <span>AI-Powered Lead Generation</span>
                 </div>
 
-                  <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-gray-900 mb-8 leading-tight">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
                     Generate <span className="text-blue-600 underline-animation">Qualified Leads</span>
                     <span className="block">with Hyper-Personalized</span>
                     <span className="text-blue-600 block">Cold Emails</span>
                   </h1>
 
-              <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl leading-relaxed">
+              <p className="text-lg md:text-xl text-gray-600 leading-relaxed">
                 Our <span className="font-semibold text-gray-900 scroll-underline underline-animation">fully automated AI system</span> scrapes deep prospect data, crafts hyper-personalized emails, and delivers them at scale to <span className="font-semibold text-gray-900 scroll-underline underline-animation">boost your booked calls</span> and revenue.
               </p>
               </div>
@@ -142,9 +141,7 @@ const Index = () => {
                         "_blank"
                       )
                     }
-                    className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-8 py-4 rounded-xl shadow-lg
-                              hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl
-                              transition duration-300 ease-in-out stable-animation focus:outline-none focus:ring-4 focus:ring-blue-300"
+                    className="btn-primary touch-target"
                     style={{ transform: 'translateZ(0)' }}
                   >
                     Book Your Strategy Call
@@ -157,9 +154,9 @@ const Index = () => {
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1.8, delay: 0.2 }}
-              className="flex justify-center lg:justify-end pr-50 stable-animation"
+              className="flex justify-center lg:justify-end stable-animation"
             >
-              <div className="min-h-[500px] w-[90%] lg:w-[70%] ml-auto stable-container">
+              <div className="min-h-[500px] w-full max-w-lg stable-container">
                 <EmailExampleCycler />
               </div>
 
@@ -169,7 +166,9 @@ const Index = () => {
         </div>
       </section>
 
-      <Infrastructure/>
+      <section className="py-16 md:py-20">
+        <Infrastructure/>
+      </section>
 
 
       {/* Process Section - Full Screen */}
@@ -178,7 +177,7 @@ const Index = () => {
       </section>
 
       {/* FAQ Section */}
-      <ScrollAnimatedSection className="py-20 bg-muted/30 stable-container">
+      <ScrollAnimatedSection className="py-16 md:py-20 bg-muted/30 stable-container">
             <FAQ />
       </ScrollAnimatedSection>
 
@@ -188,14 +187,14 @@ const Index = () => {
 
       {/* Floating CTA Button */}
       <motion.div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-50"
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 2, duration: 0.5 }}
         style={{ transform: 'translateZ(0)' }}
       >
         <CalComButton 
-          className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold px-6 py-3 rounded-xl shadow-lg hover:from-blue-700 hover:to-indigo-700 transition duration-300 ease-in-out stable-animation focus:outline-none focus:ring-4 focus:ring-blue-300"
+          className="btn-primary text-sm md:text-base px-4 py-2 md:px-6 md:py-3 touch-target"
           onClick={() => window.open('https://cal.com/hamish-countwave/30min?overlayCalendar=true', '_blank')}
         >
           Book Call

@@ -372,7 +372,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
               <div key={feature.label} className="relative">
                 <InteractiveTooltip content={feature.description}>
                   <motion.div
-                    className="flex items-center space-x-3 p-3 rounded-xl bg-white/50 border border-white/30 transition-all duration-300 hover:bg-white/80 hover:border-blue-300 hover:scale-105 cursor-pointer"
+                    className="flex items-center space-x-3 p-3 rounded-xl bg-white/50 border border-white/30 transition-all duration-300 hover:bg-white/80 hover:border-blue-300 hover:scale-105 cursor-pointer touch-target"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
                     transition={{ delay: idx * 0.1, duration: 0.5, ease: "easeOut" }}
@@ -496,7 +496,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                         <div key={key}>
                           <InteractiveTooltip content={`${key.replace(/([A-Z])/g, ' $1')}: ${value}`}>
                             <motion.div 
-                              className="text-center p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-all duration-300 cursor-pointer hover:scale-105"
+                              className="text-center p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-all duration-300 cursor-pointer hover:scale-105 touch-target"
                               initial={{ opacity: 0, y: 10 }}
                               animate={{ opacity: 1, y: 0 }}
                               transition={{ delay: idx * 0.05, duration: 0.3 }}
@@ -601,9 +601,9 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-6 rounded-xl border border-green-200 shadow-lg">
                       <div className="grid grid-cols-2 gap-6">
                         <div className="space-y-4">
-                          {[  // First two metrics
-                            { label: "Delivery Rate", value: stage.metrics.deliveryRate, color: "green" },
-                            { label: "Open Rate", value: stage.metrics.openRate, color: "blue" }
+                          {[
+                            { label: "Delivery Rate", value: stage.metrics.deliveryRate, color: "green", target: stage.metrics.deliveryRate },
+                            { label: "Open Rate", value: stage.metrics.openRate, color: "blue", target: stage.metrics.openRate }
                           ].map((metric, idx) => (
                             <div key={metric.label}>
                               <div className="flex items-center justify-between mb-2">
@@ -614,12 +614,13 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                                   </span>
                                 </InteractiveTooltip>
                               </div>
-                              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                              <div className="progress-bar">
                                 <motion.div 
-                                  className={`bg-${metric.color}-500 h-3 rounded-full shadow-lg`}
+                                  className={`progress-fill bg-${metric.color}-500`}
                                   initial={{ width: 0 }}
                                   animate={{ width: `${metric.value}%` }}
-                                  transition={{ duration: 2, delay: 0.5 + (idx * 0.3), ease: "easeOut" }}
+                                  transition={{ duration: 1.5, delay: 0.3 + (idx * 0.2), ease: "easeOut" }}
+                                  style={{ '--target-width': `${metric.target}%` } as React.CSSProperties}
                                 />
                               </div>
                             </div>
@@ -627,9 +628,9 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                         </div>
                         
                         <div className="space-y-4">
-                          {[  // Next two metrics
-                            { label: "Reply Rate", value: stage.metrics.replyRate, color: "purple" },
-                            { label: "Spam Score", value: stage.metrics.spamScore, color: "red", invert: true }
+                          {[
+                            { label: "Reply Rate", value: stage.metrics.replyRate, color: "purple", target: stage.metrics.replyRate },
+                            { label: "Spam Score", value: stage.metrics.spamScore, color: "red", invert: true, target: 100 - (stage.metrics.spamScore * 100) }
                           ].map((metric, idx) => (
                             <div key={metric.label}>
                               <div className="flex items-center justify-between mb-2">
@@ -640,12 +641,13 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                                   </span>
                                 </InteractiveTooltip>
                               </div>
-                              <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+                              <div className="progress-bar">
                                 <motion.div 
-                                  className={`bg-${metric.color}-500 h-3 rounded-full shadow-lg`}
+                                  className={`progress-fill bg-${metric.color}-500`}
                                   initial={{ width: 0 }}
-                                  animate={{ width: `${metric.invert ? (1 - metric.value / 100) * 100 : metric.value}%` }}  // normalize invert metric properly
-                                  transition={{ duration: 2, delay: 0.5 + ((idx + 2) * 0.3), ease: "easeOut" }}  // delay continues after first two
+                                  animate={{ width: `${metric.invert ? 100 - (metric.value * 100) : metric.value}%` }}
+                                  transition={{ duration: 1.5, delay: 0.7 + (idx * 0.2), ease: "easeOut" }}
+                                  style={{ '--target-width': `${metric.target}%` } as React.CSSProperties}
                                 />
                               </div>
                             </div>
@@ -657,7 +659,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                               style={{ width: "310px" }}
                               initial={{ scale: 0, rotate: -10 }}
                               animate={{ scale: 1, rotate: 0 }}
-                              transition={{ duration: 0.6, delay: 2, ease: "easeOut" }}
+                              transition={{ duration: 0.6, delay: 1.5, ease: "easeOut" }}
                             >
                               <div className="text-3xl font-bold text-green-600">{stage.metrics.callsBooked}</div>
                               <div className="text-sm text-gray-600">Calls Booked</div>
@@ -681,7 +683,7 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
 };
 
 // Neural network connection lines with enhanced animations
-const ConnectionLine = ({ from, to, active = false, delay = 0, intensity = 1 }) => {
+const InteractiveTooltip = ({ children, content }: { children: React.ReactNode; content: string }) => {
   return (
     <motion.svg
       className="absolute inset-0 w-full h-full pointer-events-none"
@@ -779,9 +781,48 @@ export const ProcessVisualization = () => {
     { from: { x: 400, y: 300 }, to: { x: 500, y: 280 }, active: activeStage >= 1 },
     { from: { x: 800, y: 280 }, to: { x: 900, y: 320 }, active: activeStage >= 2 }
   ];
+  const [position, setPosition] = useState({ top: 0, left: 0 });
+  const tooltipRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLDivElement>(null);
+
+  const updatePosition = useCallback(() => {
+    if (triggerRef.current && tooltipRef.current) {
+      const triggerRect = triggerRef.current.getBoundingClientRect();
+      const tooltipRect = tooltipRef.current.getBoundingClientRect();
+      const viewportWidth = window.innerWidth;
+      const viewportHeight = window.innerHeight;
+
+      let top = triggerRect.top - tooltipRect.height - 8;
+      let left = triggerRect.left + (triggerRect.width / 2) - (tooltipRect.width / 2);
+
+      // Adjust for viewport boundaries
+      if (left < 8) left = 8;
+      if (left + tooltipRect.width > viewportWidth - 8) {
+        left = viewportWidth - tooltipRect.width - 8;
+      }
+      if (top < 8) {
+        top = triggerRect.bottom + 8;
+      }
+
+      setPosition({ top, left });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isVisible) {
+      updatePosition();
+      window.addEventListener('scroll', updatePosition);
+      window.addEventListener('resize', updatePosition);
+      return () => {
+        window.removeEventListener('scroll', updatePosition);
+        window.removeEventListener('resize', updatePosition);
+      };
+    }
+  }, [isVisible, updatePosition]);
 
   return (
-    <div 
+    <div
+      ref={triggerRef}
       ref={ref} 
       className="relative min-h-screen bg-gradient-to-br from-gray-50 via-blue-50/30 to-purple-50/30 overflow-hidden"
     >
@@ -964,17 +1005,23 @@ export const ProcessVisualization = () => {
                 stiffness: 100
               }}
             >
+            ref={tooltipRef}
               <ProcessStageCard
                 stage={stage}
                 isActive={activeStage === index}
                 isVisible={inView}
-                onActivate={() => setActiveStage(index)}
+            className="fixed z-50 px-3 py-2 text-sm bg-gray-900 text-white rounded-lg shadow-xl whitespace-nowrap max-w-xs pointer-events-none"
+            style={{
+              top: position.top,
+              left: position.left,
+            }}
                 index={index}
               />
-            </motion.div>
+            <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45 top-full -mt-1" />
           ))}
         </div>
       </div>
     </div>
   );
 };
+          {stage.features.slice(0, 4).map((feature, idx) => {

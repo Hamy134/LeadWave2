@@ -67,6 +67,30 @@ All colors MUST be HSL.
     --transition-normal: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
+    /* Design System Variables */
+    --font-size-xs: 0.75rem;
+    --font-size-sm: 0.875rem;
+    --font-size-base: 1rem;
+    --font-size-lg: 1.125rem;
+    --font-size-xl: 1.25rem;
+    --font-size-2xl: 1.5rem;
+    --font-size-3xl: 1.875rem;
+    --font-size-4xl: 2.25rem;
+    --font-size-5xl: 3rem;
+    --font-size-6xl: 3.75rem;
+    
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 1.5rem;
+    --spacing-xl: 2rem;
+    --spacing-2xl: 3rem;
+    --spacing-3xl: 4rem;
+    
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -130,10 +154,42 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-normal);
   }
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* Typography Standardization */
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl font-bold;
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl font-bold;
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-md);
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl font-semibold;
+    line-height: var(--line-height-tight);
+    margin-bottom: var(--spacing-md);
+  }
+
+  h4 {
+    @apply text-xl md:text-2xl font-semibold;
+    line-height: var(--line-height-normal);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  p {
+    line-height: var(--line-height-relaxed);
+    margin-bottom: var(--spacing-md);
   }
 }
 
@@ -149,15 +205,21 @@ All colors MUST be HSL.
 
   /* Interactive Elements */
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-4 rounded-xl shadow-glow transition-all duration-300 hover:shadow-lg hover:scale-[1.02];
+    @apply bg-primary hover:bg-primary-dark text-primary-foreground font-semibold rounded-xl shadow-glow transition-all duration-300 hover:shadow-lg hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-primary/30;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
   }
 
   .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold px-8 py-4 rounded-xl border border-border transition-all duration-300 hover:shadow-md hover:scale-[1.02];
+    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold rounded-xl border border-border transition-all duration-300 hover:shadow-md hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-secondary/30;
+    padding: var(--spacing-md) var(--spacing-xl);
+    font-size: var(--font-size-base);
   }
 
   .btn-ghost {
-    @apply text-foreground hover:bg-muted font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-[1.02];
+    @apply text-foreground hover:bg-muted font-semibold rounded-lg transition-all duration-300 hover:scale-[1.02] focus:outline-none focus:ring-4 focus:ring-muted/30;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    font-size: var(--font-size-sm);
   }
 
   /* Animated Underlines */
@@ -207,6 +269,83 @@ All colors MUST be HSL.
   /* FAQ Hover */
   .faq-item {
     @apply p-6 rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-md hover:scale-[1.01];
+  }
+
+  /* Tooltip Improvements */
+  .tooltip {
+    @apply absolute z-50 px-3 py-2 text-sm bg-gray-900 text-white rounded-lg shadow-xl whitespace-nowrap pointer-events-none;
+    transform: translateX(-50%);
+    bottom: calc(100% + 8px);
+    left: 50%;
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+
+  .tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: #1f2937;
+  }
+
+  .tooltip.visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-4px);
+  }
+
+  /* Progress Bar Animations */
+  .progress-bar {
+    @apply h-3 bg-gray-200 rounded-full overflow-hidden;
+    position: relative;
+  }
+
+  .progress-fill {
+    @apply h-full rounded-full transition-all duration-1000 ease-out;
+    width: 0%;
+    transform-origin: left;
+  }
+
+  .progress-fill.animate {
+    animation: progressFill 2s ease-out forwards;
+  }
+
+  @keyframes progressFill {
+    from { width: 0%; }
+    to { width: var(--target-width); }
+  }
+
+  /* Responsive Design Utilities */
+  .container-responsive {
+    @apply w-full mx-auto px-4;
+    max-width: 1200px;
+  }
+
+  @media (min-width: 640px) {
+    .container-responsive {
+      @apply px-6;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container-responsive {
+      @apply px-8;
+    }
+  }
+
+  /* Touch-friendly mobile elements */
+  @media (max-width: 768px) {
+    .btn-primary,
+    .btn-secondary {
+      @apply min-h-[44px] text-base;
+      padding: var(--spacing-md) var(--spacing-lg);
+    }
+
+    .touch-target {
+      @apply min-h-[44px] min-w-[44px];
+    }
   }
 }
 
@@ -551,6 +690,26 @@ All colors MUST be HSL.
   
   .process-card {
     margin: 0 1rem;
+  }
+
+  /* Mobile-specific improvements */
+  h1 {
+    @apply text-3xl md:text-4xl lg:text-5xl;
+  }
+
+  h2 {
+    @apply text-2xl md:text-3xl;
+  }
+
+  .btn-primary,
+  .btn-secondary {
+    @apply w-full sm:w-auto;
+  }
+
+  .tooltip {
+    @apply text-xs px-2 py-1;
+    max-width: 200px;
+    white-space: normal;
   }
 }
 
