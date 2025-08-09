@@ -1,11 +1,12 @@
 import React from 'react';
 import { ScrollAnimation } from './ScrollAnimation';
+import { CountUpAnimation } from './CountUpAnimation'; // make sure this is imported
 
 const stats = [
-  { number: "2.5M+", label: "Qualified Leads Generated" },
-  { number: "15K+", label: "Booked Calls Created" },
-  { number: "73%", label: "Average Open Rate" },
-  { number: "3x", label: "Increase in Conversions" }
+  { number: "194K+", label: "Average Leads Generated" },
+  { number: "3K+", label: "Average Calls Created" },
+  { number: "62%", label: "Average Open Rate" },
+  { number: "41%", label: "Average Reply Rate" }
 ];
 
 export const Stats: React.FC = () => {
@@ -15,7 +16,7 @@ export const Stats: React.FC = () => {
         <ScrollAnimation animation="slideUp">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
-              Proven Results That <span className="underline-animation">Drive Revenue</span>
+              What Can You Expect From <span className="underline-animation">Countwave</span>
             </h2>
             <p className="text-xl text-purple-100 max-w-2xl mx-auto">
               Join thousands of sales teams generating qualified leads and booking more calls with AI
@@ -28,7 +29,11 @@ export const Stats: React.FC = () => {
             <ScrollAnimation key={index} animation="slideUp" delay={index * 100}>
               <div className="text-center group">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
-                  {stat.number}
+                  <CountUpAnimation 
+                    end={parseInt(stat.number)} 
+                    suffix={stat.number.replace(/[0-9]/g, '')} 
+                    duration={2000 + index * 200}
+                  />
                 </div>
                 <div className="text-purple-100 font-medium">{stat.label}</div>
               </div>

@@ -25,6 +25,7 @@ import { FAQ } from '../components/FAQ';
 import { CallToAction } from '@/components/CallToAction';
 import { Features } from '@/components/Features';
 import { Stats } from '../components/Stats';
+import { Infrastructure } from '@/components/infrastructureFeatures';
 
 const benefits = [
   {
@@ -60,11 +61,12 @@ const benefits = [
 ];
 
 const stats = [
-  { number: 2500000, suffix: '+', label: 'Leads Generated' },
-  { number: 15000, suffix: '+', label: 'Calls Booked' },
-  { number: 73, suffix: '%', label: 'Average Open Rate' },
-  { number: 23, suffix: '%', label: 'Average Reply Rate' }
+  { number: 194010, suffix: '+', label: 'Average Leads Generated' },
+  { number: 3045, suffix: '+', label: ' Average Calls Booked' },
+  { number: 62, suffix: '%', label: 'Average Open Rate' },
+  { number: 41, suffix: '%', label: 'Average Reply Rate' }
 ];
+
 
 const faqs = [
   {
@@ -167,33 +169,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <ScrollAnimatedSection className="py-20 bg-muted/30 stable-container">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <motion.div
-                key={stat.label}
-                className="text-center stable-animation"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                viewport={{ once: true }}
-                style={{ transform: 'translateZ(0)' }}
-              >
-                <div className="stat-number">
-                  <CountUpAnimation 
-                    end={stat.number} 
-                    suffix={stat.suffix}
-                    duration={2000 + (index * 200)}
-                  />
-                </div>
-                <div className="text-muted-foreground mt-2">{stat.label}</div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </ScrollAnimatedSection>
+      <Infrastructure/>
 
 
       {/* Process Section - Full Screen */}

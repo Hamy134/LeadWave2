@@ -5,116 +5,116 @@ import { Sparkles, Mail, User, Building } from 'lucide-react';
 const emailExamples = [
   {
     id: 1,
-    recipient: "Sarah Chen",
-    company: "TechFlow Inc",
-    role: "VP of Sales",
-    subject: "Quick question about your SDR hiring",
-    preview: "Hi Sarah, saw your LinkedIn post about scaling your sales team...",
-    content: `Hi Sarah,
+    recipient: "Laura Mitchell",
+    company: "Mitchell Manufacturing",
+    role: "Operations Director",
+    subject: "Quick idea for improving cash flow",
+    preview: "Hi Laura, noticed your recent post about delayed supplier payments...",
+    content: `Hi Laura,
 
-Saw your LinkedIn post about scaling your sales team from 5 to 15 reps this quarter.
+I saw your post last week about supplier payment delays pushing back production at Mitchell Manufacturing. That kind of disruption is tough, especially with your recent launch of the new Oak Ridge facility.
 
-We've helped similar SaaS companies like yours reduce SDR ramp time by 60% through hyper-personalized outreach that actually converts.
+We recently helped a similar manufacturer in Dayton, Ohio free up 20 percent more working capital. They did this by adjusting payment terms with key suppliers and revising quarterly tax planning strategies.
 
-Quick question: What's your biggest challenge with getting new SDRs to quota faster?
+One client was able to advance a $275,000 equipment purchase without increasing their credit line, which freed up cash for unexpected maintenance.
 
-Worth a 15-min chat?
+Would you be open to a 15-minute call next week? I’d love to explore if these approaches might ease cash flow pressures for you too.
 
-Best,
-Alex`,
-    personalization: ["Recent LinkedIn activity", "Team scaling goals", "Industry context"]
+Best,  
+Ethan`,
+    personalization: ["Recent LinkedIn post", "Oak Ridge facility", "Local company example"]
   },
   {
     id: 2,
-    recipient: "Marcus Rodriguez",
-    company: "DataSync Solutions", 
-    role: "Founder & CEO",
-    subject: "Congrats on the Series A - scaling question",
-    preview: "Hi Marcus, congrats on closing your Series A last month...",
-    content: `Hi Marcus,
+    recipient: "Sophie Allen",
+    company: "Allen & Gray Interiors",
+    role: "Creative Director",
+    subject: "Loved your new showroom launch",
+    preview: "Hi Sophie, saw the photos from your new showroom opening last week...",
+    content: `Hi Sophie,
 
-Congrats on closing your Series A last month! Exciting times ahead for DataSync.
+I loved seeing the photos from your Allen & Gray showroom opening in Richmond last Tuesday. The way you combined natural textures with bold jewel tones really stood out.
 
-I noticed you're planning to 3x your sales team based on your recent TechCrunch interview. 
+We’ve been working with interior design studios in Melbourne’s south-east to connect them directly with developers and architects who are prioritising sustainable and boutique design.
 
-We just helped a Series A company in the data space go from 12% to 34% email response rates using AI-powered personalization at scale.
+For example, one client recently booked eight developer meetings over six weeks — all from messages tailored to recent projects those developers completed.
 
-Their biggest win? Cutting prospect research time from 30 minutes to 30 seconds per lead.
+Given the surge in demand for sustainable commercial spaces, I thought a personalised outreach campaign might open up new partnerships for Allen & Gray this quarter without adding more to your already busy schedule.
 
-Mind if I share their exact playbook with you?
+Can I send you a couple of example messages?
 
-Best,
-Alex`,
-    personalization: ["Recent funding news", "Growth plans", "Industry benchmarks"]
+Cheers,  
+Marcus`,
+    personalization: ["Showroom launch date", "Richmond location", "Local developer network"]
   },
   {
     id: 3,
-    recipient: "Emily Watson",
-    company: "CloudFirst",
-    role: "Director of Marketing",
-    subject: "Your 'death of cold email' article",
-    preview: "Hi Emily, loved your recent article about the death of generic cold emails...",
-    content: `Hi Emily,
+    recipient: "David Harper",
+    company: "Harper & Co Real Estate",
+    role: "Managing Director",
+    subject: "Re: Finding more off-market sellers",
+    preview: "Hi David, noticed you’ve been posting about rising demand in Bayside...",
+    content: `Hi David,
 
-Loved your recent article about the death of generic cold emails. You're spot on about personalization being the game-changer.
+I saw your recent posts about the rising buyer demand in Bayside, especially around Hampton and Sandringham. Properties are selling before they even reach major listing sites.
 
-Curious: what if you could automate that level of personalization?
+We help agencies like Harper & Co identify off-market sellers by reaching out to homeowners showing early signs like recent refinancing, council permits for extensions, or landscaping projects.
 
-We're helping B2B teams maintain authentic, personalized outreach while scaling 10x faster using AI research and content generation.
+One client booked 12 off-market valuation appointments in just three weeks by sending highly personalised messages reflecting each homeowner’s situation.
 
-CloudFirst's current email strategy looks solid, but I'd love to show you how companies like yours are achieving 40%+ response rates.
+With your focus on premium properties in competitive suburbs, a tailored approach could help you secure more exclusive listings before other agents even hear about them.
 
-15-minute demo this week?
+Would you be open to a quick call to discuss how this could work?
 
-Best,
-Alex`,
-    personalization: ["Recent content", "Current strategy analysis", "Relevant metrics"]
+Best,  
+Samantha`,
+    personalization: ["Bayside suburbs", "Recent market trends", "Personalized seller signals"]
   },
   {
     id: 4,
-    recipient: "David Kim",
-    company: "NextGen Logistics",
-    role: "Head of Business Development",
-    subject: "Re: Automating lead qualification",
-    preview: "Hi David, noticed you're hiring for a Lead Qualification Specialist...",
-    content: `Hi David,
+    recipient: "Olivia Bennett",
+    company: "Bennett Recruitment",
+    role: "Founder",
+    subject: "Quick win for filling niche tech roles",
+    preview: "Hi Olivia, saw your post about the shortage of data engineers...",
+    content: `Hi Olivia,
 
-Noticed you're hiring for a Lead Qualification Specialist on your careers page.
+I read your LinkedIn post about the shortage of data engineers and how candidates often don’t stick past probation. It’s a widespread issue in fintech and SaaS, especially for startups scaling fast like VelocityTech.
 
-What if I told you we could automate 80% of that qualification process while maintaining the personal touch your prospects expect?
+We’ve helped agencies like Bennett Recruitment win more retained contracts by identifying and engaging hiring managers before they post roles publicly.
 
-NextGen's expansion into the European market (congrats btw!) probably means more leads to qualify across different time zones.
+A fintech client recently filled three critical retained roles in under 30 days through proactive, hyper-personalised outreach referencing their tech stack and recent product launches.
 
-We've helped logistics companies like yours qualify 3x more leads with the same team size.
+For specialised roles, timing is key — being the first recruiter to connect can make all the difference.
 
-Worth exploring how this could accelerate your European launch?
+Can I share a couple of example campaigns that worked well for similar agencies?
 
-Best,
-Alex`,
-    personalization: ["Current hiring", "Market expansion", "Industry-specific benefits"]
+Best,  
+Tom`,
+    personalization: ["LinkedIn hiring post", "VelocityTech client", "Fintech recruiting"]
   },
   {
     id: 5,
-    recipient: "Lisa Thompson",
-    company: "InnovateCRM",
-    role: "Chief Revenue Officer",
-    subject: "Your Q4 revenue acceleration strategy",
-    preview: "Hi Lisa, with Q4 being make-or-break for SaaS companies...",
-    content: `Hi Lisa,
+    recipient: "Rachel King",
+    company: "King’s Legal Advisory",
+    role: "Senior Partner",
+    subject: "Your recent case win",
+    preview: "Hi Rachel, congratulations on that commercial litigation win last month...",
+    content: `Hi Rachel,
 
-With Q4 being make-or-break for SaaS companies, I imagine you're laser-focused on pipeline acceleration right now.
+Congrats on your recent commercial litigation win involving Westfield Construction. I read the coverage in Business Law Weekly — impressive work for a boutique firm.
 
-Saw InnovateCRM hit 150% of Q3 targets (impressive!) and curious about your strategy for maintaining that momentum.
+We help firms like King’s Legal Advisory win more high-value retainers by connecting them with CFOs and legal heads in sectors prone to disputes you specialise in.
 
-We're helping CROs like yourself add 40% more qualified meetings to their pipeline without increasing headcount.
+One client secured eight new retainers in six weeks by sending a series of messages tailored to decision-makers in the construction and manufacturing sectors.
 
-Our secret? AI that researches prospects better than most humans and crafts emails that actually get responses.
+With your momentum, it could be a great time to reach more corporate clients who’d benefit from your expertise.
 
-Quick call this week to share how we helped a similar CRM company add $2M to their Q4 pipeline?
+Would you be open to a brief call to explore this?
 
-Best,
-Alex`,
-    personalization: ["Quarterly performance", "Industry timing", "Revenue goals"]
+Best,  
+Daniel`,
+    personalization: ["Recent litigation win", "Business Law Weekly", "Construction sector targeting"]
   }
 ];
 
