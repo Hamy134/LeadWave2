@@ -1,7 +1,6 @@
 import React from 'react';
-import { Users, TrendingUp, Zap, Clock, BarChart } from 'lucide-react';
+import { Users, TrendingUp, Zap, Clock } from 'lucide-react';
 import { ScrollAnimation } from './ScrollAnimation';
-
 
 const features = [
   {
@@ -32,28 +31,36 @@ const features = [
 
 export const Features: React.FC = () => {
   return (
-    <section className="py-24 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-6">
+    <section className="py-16 md:py-24 bg-gray-50">
+      {/* Added max-width & responsive padding for breathing room */}
+      <div className="max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
         <ScrollAnimation animation="slideUp">
           <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">
               Why Choose <span className="text-blue-600 underline-animation">Countwave AI</span>
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Transform your <span className="font-semibold text-gray-900 underline-animation">top-of-funnel</span> with AI that delivers qualified leads and booked calls on autopilot.
             </p>
           </div>
         </ScrollAnimation>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8">
           {features.map((feature, index) => (
             <ScrollAnimation key={index} animation="slideUp" delay={index * 100}>
-              <div className="group bg-white rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100">
-                <div className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+              <div
+                className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg 
+                border border-gray-100 touch-target transition-all duration-500 
+                hover:-translate-y-2 hover:rotate-1 hover:shadow-blue-200 hover:shadow-2xl"
+              >
+                <div
+                  className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6
+                  transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110"
+                >
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="text-xl font-bold text-gray-900 mb-4">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-4">{feature.title}</h3>
+                <p className="text-sm md:text-base text-gray-600 leading-relaxed">{feature.description}</p>
               </div>
             </ScrollAnimation>
           ))}
