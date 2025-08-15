@@ -27,7 +27,7 @@ export const Stats: React.FC = () => {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <ScrollAnimation key={index} animation="slideUp" delay={index * 100}>
-              <div className="text-center group">
+              <div className="text-center group transform transition-all duration-300 hover:scale-110">
                 <div className="text-4xl md:text-5xl font-bold text-white mb-2 group-hover:scale-110 transition-transform duration-300">
                   <CountUpAnimation 
                     end={parseInt(stat.number)} 
@@ -35,7 +35,7 @@ export const Stats: React.FC = () => {
                     duration={2000 + index * 200}
                   />
                 </div>
-                <div className="text-purple-100 font-medium">{stat.label}</div>
+                <div className="text-purple-100 font-medium transition-colors duration-300 group-hover:text-white">{stat.label}</div>
               </div>
             </ScrollAnimation>
           ))}

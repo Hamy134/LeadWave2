@@ -209,7 +209,7 @@ export const EmailExampleCycler = () => {
         <button
           onClick={handleGenerateExample}
           disabled={isAnimating}
-          className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed"
+          className="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
         >
           <motion.div
             className="flex items-center justify-center space-x-2"

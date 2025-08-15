@@ -36,11 +36,11 @@ export const CallToAction: React.FC<CallToActionProps> = ({ onBookCall }) => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-12">
             <button
               onClick={onBookCall}
-              className="group bg-white text-gray-900 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-105"
+              className="group bg-white text-gray-900 px-8 py-4 rounded-full font-bold text-lg transition-all duration-300 flex items-center gap-3 shadow-xl hover:shadow-2xl transform hover:scale-110 animate-bounce-subtle"
             >
               <Calendar className="w-6 h-6 text-blue-600" />
               Book Your Strategy Call
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform duration-300" />
             </button>
           </div>
         </ScrollAnimation>

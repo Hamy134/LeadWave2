@@ -51,11 +51,13 @@ export const Features: React.FC = () => {
               <div
                 className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg 
                 border border-gray-100 touch-target transition-all duration-500 
-                hover:-translate-y-2 hover:rotate-1 hover:shadow-blue-200 hover:shadow-2xl"
+                hover:-translate-y-2 hover:rotate-1 hover:shadow-blue-200 hover:shadow-2xl
+                hover:scale-105 transform"
               >
                 <div
                   className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6
-                  transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110"
+                  transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110
+                  animate-bounce-subtle"
                 >
                   <feature.icon className="w-8 h-8 text-white" />
                 </div>

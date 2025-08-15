@@ -149,15 +149,15 @@ All colors MUST be HSL.
 
   /* Interactive Elements */
   .btn-primary {
-    @apply bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-4 rounded-xl shadow-glow transition-all duration-300 hover:shadow-lg hover:scale-[1.02];
+    @apply bg-primary hover:bg-primary-dark text-primary-foreground font-semibold px-8 py-4 rounded-xl shadow-glow transition-all duration-300 hover:shadow-lg hover:scale-105 transform;
   }
 
   .btn-secondary {
-    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold px-8 py-4 rounded-xl border border-border transition-all duration-300 hover:shadow-md hover:scale-[1.02];
+    @apply bg-secondary hover:bg-secondary/80 text-secondary-foreground font-semibold px-8 py-4 rounded-xl border border-border transition-all duration-300 hover:shadow-md hover:scale-105 transform;
   }
 
   .btn-ghost {
-    @apply text-foreground hover:bg-muted font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-[1.02];
+    @apply text-foreground hover:bg-muted font-semibold px-6 py-3 rounded-lg transition-all duration-300 hover:scale-105 transform;
   }
 
   /* Animated Underlines */
@@ -167,16 +167,16 @@ All colors MUST be HSL.
 
   /* Process Flow */
   .process-step {
-    @apply relative p-8 rounded-2xl bg-card border border-border shadow-md transition-all duration-500;
+    @apply relative p-8 rounded-2xl bg-card border border-border shadow-md transition-all duration-500 hover:scale-105 transform;
   }
 
   .process-step.active {
-    @apply border-primary shadow-glow scale-[1.02];
+    @apply border-primary shadow-glow scale-105 animate-glow-pulse;
   }
 
   /* Email Preview */
   .email-preview {
-    @apply bg-card border border-border rounded-xl p-6 shadow-md transition-all duration-500;
+    @apply bg-card border border-border rounded-xl p-6 shadow-md transition-all duration-500 hover:scale-105 transform hover:shadow-xl;
   }
 
   /* Floating Animation */
@@ -206,7 +206,20 @@ All colors MUST be HSL.
 
   /* FAQ Hover */
   .faq-item {
-    @apply p-6 rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-md hover:scale-[1.01];
+    @apply p-6 rounded-xl border border-border transition-all duration-300 hover:border-primary/30 hover:shadow-md hover:scale-105 transform;
+  }
+
+  /* Enhanced Interactive Elements */
+  .interactive-card {
+    @apply transition-all duration-300 hover:scale-105 hover:shadow-xl transform cursor-pointer;
+  }
+
+  .animated-icon {
+    @apply transition-all duration-300 hover:scale-110 hover:rotate-12 transform;
+  }
+
+  .pulse-on-hover:hover {
+    animation: pulse-glow 1s ease-in-out;
   }
 }
 

@@ -41,11 +41,12 @@ export const Infrastructure: React.FC = () => (
               className="group bg-white rounded-2xl p-6 md:p-8 shadow-lg 
               border border-gray-100 min-h-[260px] flex flex-col items-start
               transition-all duration-500 hover:-translate-y-2 hover:rotate-1
-              hover:shadow-blue-200 hover:shadow-2xl"
+              hover:shadow-blue-200 hover:shadow-2xl hover:scale-105 transform"
             >
               <div
                 className="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center
-                mb-6 transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110"
+                mb-6 transform transition-all duration-500 group-hover:rotate-12 group-hover:scale-110
+                animate-glow-pulse"
               >
                 <Icon className="w-8 h-8 text-white" />
               </div>

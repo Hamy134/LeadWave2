@@ -82,7 +82,7 @@ const mockEmails = [
   {
     id: 1,
     subject: "Idea for smoothing production cash flow",
-    preview: "Hi Laura, I saw your post about supplier delays. We’ve been helping manufacturers unlock 15–25% more working capital...",
+    preview: "Hi Laura, I saw your post about supplier delays. We've been helping manufacturers unlock 15–25% more working capital...",
     personalization: "Referenced LinkedIn post on supplier payment delays",
     tone: "Professional and consultative",
     valueProp: "Free up 15–25% working capital",
@@ -112,7 +112,7 @@ const mockEmails = [
   {
     id: 3,
     subject: "Winning more off-market listings in Bayside",
-    preview: "Hi David, I noticed your post on market demand. We’ve been helping agencies secure exclusives before listings go public...",
+    preview: "Hi David, I noticed your post on market demand. We've been helping agencies secure exclusives before listings go public...",
     personalization: "Referenced posts on Bayside market demand",
     tone: "Strategic and results-driven",
     valueProp: "Book 12 valuations in 3 weeks",
@@ -231,35 +231,6 @@ const processStages = [
   }
 ];
 
-// Enhanced tooltip component
-const InteractiveTooltip = ({ children, content }) => {
-  const [isVisible, setIsVisible] = useState(false);
-  
-  return (
-    <div 
-      className="relative inline-block"
-      onMouseEnter={() => setIsVisible(true)}
-      onMouseLeave={() => setIsVisible(false)}
-    >
-      {children}
-      <AnimatePresence>
-        {isVisible && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: 10 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute z-50 px-3 py-2 text-sm bg-gray-900 text-white rounded-lg shadow-xl whitespace-nowrap bottom-full mb-2 left-1/2 transform -translate-x-1/2 max-w-xs"
-          >
-            {content}
-            <div className="absolute left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 rotate-45 bottom-[-4px]" />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-};
-
 // Enhanced stage card component with more interactivity
 const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => {
   const [hoveredFeature, setHoveredFeature] = useState(null);
@@ -331,11 +302,9 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center space-x-4">
-            <InteractiveTooltip content={`${stage.title} - Click to explore`}>
-              <div className={`p-4 rounded-2xl bg-gradient-to-br ${stage.color} text-white shadow-lg transform transition-all duration-300 hover:scale-110`}>
+              <div className={`p-4 rounded-2xl bg-gradient-to-br ${stage.color} text-white shadow-lg transform transition-all duration-300`}>
                 <Icon className="w-8 h-8" />
               </div>
-            </InteractiveTooltip>
             <div>
               <h3 className="text-2xl font-bold text-gray-900">{stage.title}</h3>
               <p className="text-gray-600 font-medium">{stage.subtitle}</p>
@@ -344,15 +313,13 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
           
           {/* Status indicator */}
           <div className="flex items-center space-x-3">
-            <InteractiveTooltip content={isActive ? 'System Active' : 'System Standby'}>
-              <div className={`w-4 h-4 rounded-full ${isActive ? 'bg-green-500 animate-pulse shadow-lg shadow-green-500/50' : 'bg-gray-300'} transition-all duration-300`} />
-            </InteractiveTooltip>
+            <div className={`w-4 h-4 rounded-full ${isActive ? 'bg-green-500 animate-pulse shadow-lg shadow-green-500/50' : 'bg-gray-300'} transition-all duration-300`} />
             <button
               onClick={(e) => {
                 e.stopPropagation();
                 setShowDetails(!showDetails);
               }}
-              className="p-2 rounded-lg bg-white/50 hover:bg-white/80 transition-all duration-300 hover:scale-110"
+              className="p-2 rounded-lg bg-white/50 hover:bg-white/80 transition-all duration-300"
             >
               <Settings className="w-4 h-4" />
             </button>
@@ -370,16 +337,11 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
             const FeatureIcon = feature.icon;
             return (
               <div key={feature.label} className="relative">
-                <InteractiveTooltip content={feature.description}>
                   <motion.div
-                    className="flex items-center space-x-3 p-3 rounded-xl bg-white/50 border border-white/30 transition-all duration-300 hover:bg-white/80 hover:border-blue-300 hover:scale-105 cursor-pointer"
+                    className="flex items-center space-x-3 p-3 rounded-xl bg-white/50 border border-white/30 transition-all duration-300 hover:bg-white/80 hover:border-blue-300"
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: isVisible ? 1 : 0, x: isVisible ? 0 : -20 }}
                     transition={{ delay: idx * 0.1, duration: 0.5, ease: "easeOut" }}
-                    onHoverStart={() => setHoveredFeature(feature.label)}
-                    onHoverEnd={() => setHoveredFeature(null)}
-                    whileHover={{ y: -2 }}
-                    whileTap={{ scale: 0.98 }}
                   >
                     <FeatureIcon className={`w-5 h-5 transition-all duration-300 ${
                       feature.status === 'active' ? 'text-green-500' :
@@ -397,7 +359,6 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                       <div className="w-2 h-2 bg-yellow-500 rounded-full animate-ping" />
                     )}
                   </motion.div>
-                </InteractiveTooltip>
               </div>
             );
           })}
@@ -494,17 +455,15 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                     <div className="grid grid-cols-3 gap-3">
                       {Object.entries(stage.metrics).slice(0, 3).map(([key, value], idx) => (
                         <div key={key}>
-                          <InteractiveTooltip content={`${key.replace(/([A-Z])/g, ' $1')}: ${value}`}>
-                            <motion.div 
-                              className="text-center p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-all duration-300 cursor-pointer hover:scale-105"
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              transition={{ delay: idx * 0.05, duration: 0.3 }}
-                            >
-                              <div className="text-xl font-bold text-blue-600">{value}</div>
-                              <div className="text-xs text-gray-600 capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
-                            </motion.div>
-                          </InteractiveTooltip>
+                           <motion.div 
+                            className="text-center p-3 bg-white/50 rounded-lg hover:bg-white/80 transition-all duration-300"
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: idx * 0.05, duration: 0.3 }}
+                          >
+                            <div className="text-xl font-bold text-blue-600">{value}</div>
+                            <div className="text-xs text-gray-600 capitalize">{key.replace(/([A-Z])/g, ' $1')}</div>
+                          </motion.div>
                         </div>
                       ))}
                     </div>
@@ -562,22 +521,18 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                         
                         <div className="flex items-center justify-between pt-4 border-t border-purple-200">
                           <div className="flex space-x-4 text-sm">
-                            <InteractiveTooltip content="Predicted open rate based on AI analysis">
-                              <span className="flex items-center space-x-1 cursor-help">
-                                <Eye className="w-4 h-4 text-blue-500" />
-                                <span>{mockEmails[currentEmail].openRate}% open</span>
-                              </span>
-                            </InteractiveTooltip>
-                            <InteractiveTooltip content="Predicted reply rate based on personalization">
-                              <span className="flex items-center space-x-1 cursor-help">
-                                <MessageSquare className="w-4 h-4 text-green-500" />
-                                <span>{mockEmails[currentEmail].replyRate}% reply</span>
-                              </span>
-                            </InteractiveTooltip>
-                          </div>
-                          <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
-                            {mockEmails[currentEmail].valueProp}
-                          </div>
+                                <span className="flex items-center space-x-1">
+                                  <Eye className="w-4 h-4 text-blue-500" />
+                                  <span>{mockEmails[currentEmail].openRate}% open</span>
+                                </span>
+                                <span className="flex items-center space-x-1">
+                                  <MessageSquare className="w-4 h-4 text-green-500" />
+                                  <span>{mockEmails[currentEmail].replyRate}% reply</span>
+                                </span>
+                            </div>
+                            <div className="px-3 py-1 bg-purple-100 text-purple-700 rounded-full text-xs font-medium">
+                              {mockEmails[currentEmail].valueProp}
+                            </div>
                         </div>
                       </div>
                     </motion.div>
@@ -608,11 +563,9 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                             <div key={metric.label}>
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-sm font-medium">{metric.label}</span>
-                                <InteractiveTooltip content={`Industry average: ${metric.label === 'Delivery Rate' ? '85%' : '22%'}`}>
-                                  <span className={`text-sm font-bold text-${metric.color}-600 cursor-help`}>
+                                  <span className={`text-sm font-bold text-${metric.color}-600`}>
                                     {metric.value}%
                                   </span>
-                                </InteractiveTooltip>
                               </div>
                               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                                 <motion.div 
@@ -634,11 +587,9 @@ const ProcessStageCard = ({ stage, isActive, isVisible, onActivate, index }) => 
                             <div key={metric.label}>
                               <div className="flex items-center justify-between mb-2">
                                 <span className="text-sm font-medium">{metric.label}</span>
-                                <InteractiveTooltip content={`${metric.invert ? 'Lower is better' : 'Higher is better'}`}>
-                                  <span className={`text-sm font-bold text-${metric.color}-600 cursor-help`}>
+                                  <span className={`text-sm font-bold text-${metric.color}-600`}>
                                     {metric.value}{metric.invert ? '' : '%'}
                                   </span>
-                                </InteractiveTooltip>
                               </div>
                               <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
                                 <motion.div 
@@ -894,43 +845,37 @@ export const ProcessVisualization = () => {
           <div className="flex items-center space-x-6 bg-white/80 backdrop-blur-md border border-gray-200/50 rounded-2xl p-4 shadow-lg">
             
             {/* Play/Pause Button */}
-            <InteractiveTooltip content={isPlaying ? 'Pause automation' : 'Resume automation'}>
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-medium transition-all hover:bg-blue-700 hover:scale-105 shadow-md"
+                className="flex items-center space-x-2 px-4 py-2 bg-blue-600 text-white rounded-xl font-medium transition-all hover:bg-blue-700 shadow-md"
               >
                 {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
                 <span>{isPlaying ? 'Pause' : 'Play'}</span>
               </button>
-            </InteractiveTooltip>
 
             {/* Stage Dots */}
             <div className="flex items-center space-x-2">
               {processStages.map((_, index) => (
-                <InteractiveTooltip key={index} content={`Stage ${index + 1}: ${processStages[index].title}`}>
                   <button
                     onClick={() => setActiveStage(index)}
                     className={`w-3 h-3 rounded-full transition-all duration-300 ${
                       activeStage === index 
                         ? 'bg-blue-600 scale-125 shadow-lg shadow-blue-600/50' 
-                        : 'bg-gray-300 hover:bg-gray-400 hover:scale-110'
+                        : 'bg-gray-300 hover:bg-gray-400'
                     }`}
                   />
-                </InteractiveTooltip>
               ))}
             </div>
 
             {/* Metrics Toggle */}
-            <InteractiveTooltip content="Toggle performance metrics">
               <button
                 onClick={() => setShowMetrics(!showMetrics)}
-                className={`p-2 rounded-lg transition-all duration-300 hover:scale-110 ${
+                className={`p-2 rounded-lg transition-all duration-300 ${
                   showMetrics ? 'bg-blue-600 text-white' : 'bg-gray-100 hover:bg-gray-200'
                 }`}
               >
                 <BarChart3 className="w-4 h-4" />
               </button>
-            </InteractiveTooltip>
 
             {/* View Mode Indicator */}
             <div className="flex items-center space-x-2 text-sm text-gray-600">
