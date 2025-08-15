@@ -105,6 +105,7 @@ const Index = () => {
       <section className="relative overflow-hidden py-12 md:py-20 lg:py-32">
         <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-12 lg:px-20">
           <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_1fr] gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-12 items-center">
             
             {/* Hero Content */}
             <motion.div
@@ -113,7 +114,7 @@ const Index = () => {
               transition={{ duration: 0.8 }}
               className="space-y-6 md:space-y-8"
             >
-              <div className="space-y-6 max-w-2xl">
+              <div className="space-y-6 max-w-4xl">
                 <div className="inline-flex items-center space-x-2 px-4 py-2 bg-primary/10 text-primary rounded-full text-sm font-semibold">
                   <Star className="w-4 h-4" />
                   <span>AI-Powered Lead Generation</span>
@@ -139,7 +140,7 @@ const Index = () => {
                       "_blank"
                     )
                   }
-                  className="btn-primary touch-target"
+                  className="btn-primary touch-target transform transition-all duration-300 hover:scale-105 hover:shadow-xl"
                 >
                   Book Your Strategy Call
                 </CalComButton>
@@ -153,7 +154,7 @@ const Index = () => {
               transition={{ duration: 1.8, delay: 0.2 }}
               className="flex justify-center lg:justify-end"
             >
-              <div className="w-full max-w-lg min-h-[550px] flex items-center">
+              <div className="w-full max-w-md min-h-[550px] flex items-center">
                 <EmailExampleCycler />
               </div>
             </motion.div>
@@ -191,7 +192,7 @@ const Index = () => {
         style={{ transform: 'translateZ(0)' }}
       >
         <CalComButton 
-          className="btn-primary text-sm md:text-base px-4 py-2 md:px-6 md:py-3 touch-target"
+          className="btn-primary text-sm md:text-base px-4 py-2 md:px-6 md:py-3 touch-target transform transition-all duration-300 hover:scale-110 hover:shadow-2xl animate-bounce-subtle"
           onClick={() => window.open('https://cal.com/hamish-countwave/30min?overlayCalendar=true', '_blank')}
         >
           Book Call
